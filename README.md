@@ -12,4 +12,6 @@ Check this nice overview of [all the significant findings](nice_table_signif_res
 
 ## DATA
 
+Check [README](DATA/README.md) inside the folder for more info.
+
 ## FIGURES
