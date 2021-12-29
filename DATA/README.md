@@ -52,3 +52,15 @@ Each tibble has the following variables:
 
 ### CpG_info_Xchrom_manifest.rds
 
+`tibble` with the information about all the CpG probes that are on X chromosome
+on the EPIC array. Taken from the original Illumina Manifest file (available
+on the net: https://support.illumina.com/array/array_kits/infinium-methylationepic-beadchip-kit/downloads.html).
+
+Some important fields are listed below:
+
+|  _variable name_       |   _format_     |    _description_       |
+|:-----------------------|:--------------:|:-----------------------|
+| `Name`                 | character      | CpG id (equal to `IllmnID`) |
+| `CHR`                  | character      | chromosome (X)         |
+| `MAPINFO`              | numeric        | coordinates in GRCh37  |
+
