@@ -14,43 +14,39 @@ library(ggcorrplot)
 library(biomaRt)
 library(grid)
 
-which_gender <- "girls"
+which_gender <- "boys"
 which_model <- 1
-which_signif <- 5
+which_signif <- 1
+# used internal naming of the models, but for publication, we need to
+#  translate it to model 1, 2, 3, 4
 all_model_names <- c("1c", "parents.1c", "1d.bw", "parents.1d.bw")
 which_model_name <- all_model_names[which_model]
 which_model_name
 
+# FDR threshold for significant findings
 p_threshold <- 0.05
+# how many CpGs minimum in a DMR?
 min_cpgs_in_dmr <- 3
 
-source("grabRegulRegions.R")
-source("grabGenes.R")
+source(here("SCRIPTS", "grabRegulRegions.R"))
+source(here("SCRIPTS", "grabGenes.R"))
 
 # READ DATA ----
-load(
-  here("DATA", "XchromosomeResults.RData")
-)
-all_res_names <- ls(pattern = "^Both.|^Boys.|^Girls.")
-rm(list = all_res_names)
-
 # EWAS results
-ewas_results <- readRDS(here("DATA", "Xchromosome_results_TEXT.rds"))
-names(ewas_results) <- all_res_names
+ewas_results <- readRDS(here("DATA", "XchromosomeResultsSexStratified.rds"))
 
 # CpG data
 cpg_info <- readRDS(here("DATA", "CpG_info_Xchrom_manifest.rds"))
 
 # DMR data
-dmrff_res_all <- readRDS(here("DATA", "DMRFF_results_TEXT.rds"))
-names(dmrff_res_all) <- all_res_names
+dmrff_res_all <- readRDS(here("DATA", "DMRFFResults.rds"))
 
 # ADAPT DATA ----
 # how many base pairs to show around the chosen EWAS top hit
-# margin_zoom <- rep(50000, 2)
+margin_zoom <- rep(50000, 2)
 
 # !NB! lower range for cg17479100 due to high density of CpGs there
-margin_zoom <- rep(10000, 2)
+# margin_zoom <- rep(10000, 2)
 
 # !NB! lower range for cg00243584 due to high density of CpGs there
 # margin_zoom <- rep(20000, 2)
@@ -62,18 +58,12 @@ cur_chosen_ewas_res <- ewas_results[[
         which_model_name,
         sep = "."
       )
-    ]]$results %>%
-      mutate(ps_adj_BH = stats::p.adjust(ps, method = "BH")) %>% 
-      dplyr::select(-z_stat, -starts_with("old_"))
+    ]]
 
 # get info about the chosen CPG
 best_ewas <- cur_chosen_ewas_res %>%
   arrange(ps, ps_adj_BH) %>%
-  slice(which_signif) %>%
-  left_join(
-    cpg_info %>% 
-      dplyr::select(cpg_id = Name, CHR, MAPINFO, Strand)
-  )
+  slice(which_signif)
 best_ewas
 
 # read correlation data
@@ -99,7 +89,7 @@ cur_chosen_cpgs <- cpg_info %>%
   ) %>%
   left_join(
     cur_chosen_ewas_res,
-    by = c("CpG" = "cpg_id")
+    by = c("CpG" = "cpg_id", "MAPINFO", "CHR", "Strand")
   ) %>%
   filter(!is.na(effect_size)) %>%
   arrange(MAPINFO)
@@ -287,8 +277,6 @@ karyoploteR::kpPlotMarkers(
   data.panel = 'all',
   r0 = 1, r1 = 0.05,
   ymin = 0, ymax = 0.65,
-  # text.orientation = "horizontal",
-  # label.dist = 0.05,
   clipping = FALSE,
   line.color = "grey60",
   pos = 2,
@@ -303,7 +291,8 @@ if(!is.null(cur_genes)){
     data.panel = 2,
     r0 = 0.1,
     r1 = 0.4,
-    gene.name.position = "right"
+    gene.name.position = "left", # NB: this needs to be adjusted to each figure!
+    # clipping = FALSE # used only when producing the figure for cg00243584
   )
   karyoploteR::kpAddLabels(
     kp_tmp, labels = "genes",
@@ -368,10 +357,10 @@ dev.off()
 png(
   filename = here("FIGURES", paste0("rotated_corr_matrix_", which_gender,
                         "_model", which_model, "_", best_ewas$cpg_id, ".png")),
-  width = 17, # for girls - larger matrix
-  height = 12, # for girls - larger matrix
-  # width = 13, # for girls - larger matrix
-  # height = 9, # for girls - larger matrix
+  width = 17, # for larger matrix
+  height = 12, # for larger matrix
+  # width = 13, # for larger matrix
+  # height = 9, # for larger matrix
   # width = 9,
   # height = 6,
   units = "in",
@@ -388,7 +377,7 @@ grid.rect(
   x = unit(0.4, "npc"),
   y = unit(0.5, "npc"),
   width = unit(0.91, "npc"),
-  # width = unit(0.88, "npc"), # for boys
+  # width = unit(0.88, "npc"), # for smaller matrices
   height = unit(1, "npc"),
   gp = gpar(fill = "white", col = "white")
 )
@@ -423,4 +412,3 @@ grid.text(
 
 dev.off()
 
-# SAVE ----
