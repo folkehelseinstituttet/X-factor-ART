@@ -64,3 +64,40 @@ Some important fields are listed below:
 | `CHR`                  | character      | chromosome (X)         |
 | `MAPINFO`              | numeric        | coordinates in GRCh37  |
 
+### Genes and regulatory regions
+
+All the files beginning with `cur_genes_` or `cur_regul_regs_` contain
+a `GRanges` object with genes or regulatory regions, respectively, that holds
+specific annotations in the regions around the indicated CpG. These `GRanges`
+objects can be used in subsequent call to `karyoploteR` plotting functions.
+
+These can be read in as follows:
+
+```{r}
+genes <- readRDS(
+  here("DATA", "cur_genes_girls_model1_cg26175661.rds.txt")
+)
+
+regul_regs <- readRDS(
+  here("DATA", "cur_regul_regs_girls_model1_cg26175661.rds.txt")
+)
+```
+
+### Matrices of DNA methylation correlation
+
+All the files beginning with `correlation_plot_` or `correlation_matrix_`
+contain a `ggplot` object or a `tibble`, respectively, that holds the
+correlation coefficients between all pairs of CpGs around the CpG indicated
+in the file name.
+
+These can be read in as follows:
+
+```{r}
+corr_plot <- readRDS(
+  here("DATA", "correlation_plot_girls_model1_cg26175661.rds.txt")
+)
+
+corr_matrix <- readRDS(
+  here("DATA", "correlation_matrix_girls_model1_cg26175661.rds.txt")
+)
+```
