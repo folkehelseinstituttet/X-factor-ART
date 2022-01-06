@@ -147,3 +147,9 @@ write_delim(
   file = here("DATA", "TFs_methyl_sensitive_signif_CpGs.dat"),
   delim = "\t"
 )
+
+write_delim(
+  tfs_binding_signif_cpgs_clean %>%
+    arrange(CpG, TF_name),
+  file = here("DATA", "TFs_binding_signif_CpGs_cleaned_all.dat")
+)
