@@ -1,0 +1,79 @@
+/usr/lib/python3.6/importlib/_bootstrap.py:219: ImportWarning: can't resolve package from __spec__ or __package__, falling back on __name__ and __path__
+| TFAP2A _ FL    |  MethylMinus           |
+| -------------- | ---------------------- |
+| TFAP2B _ DBD   |  MethylMinus           |
+| TFAP2C _ DBD   |  MethylMinus           |
+| TFAP2E _ FL    |  MethylMinus           |
+| GRHL1 _ DBD    |  MethylPlus *C*        |
+| TFCP2 _ DBD    |  MethylPlus *C*        |
+| TFCP2 _ FL     |  MethylPlus *W*        |
+| TFCP2L1 _ DBD  |  MethylPlus *C*        |
+| UBP1 _ DBD     |  MethylPlus *C*        |
+| YBX1 _ DBD     |  No CpG                |
+| CUX1 _ DBD     |  MethylMinus           |
+| CUX2 _ DBD     |  inconclusive          |
+| ONECUT1 _ DBD  |  MethylMinus           |
+| ONECUT1 _ FL   |  MethylMinus           |
+| ONECUT2 _ DBD  |  MethylMinus           |
+| ONECUT2 _ FL   |  MethylMinus           |
+| ONECUT3 _ DBD  |  MethylMinus           |
+| ARNT2 _ DBD    |  MethylMinus           |
+| ARNTL _ DBD    |  MethylMinus           |
+| ASCL1 _ DBD    |  No CpG                |
+| ASCL2 _ DBD    |  No CpG                |
+| ASCL2 _ FL     |  MethylMinus *S*       |
+| ATOH1 _ DBD    |  No CpG                |
+| ATOH7 _ DBD    |  No CpG *N*            |
+| BHLHA15 _ DBD  |  No CpG                |
+| BHLHE22 _ DBD  |  No CpG                |
+| Index          |                        |
+| BHLHE23 _ DBD  |  No CpG                |
+| BHLHE23 _ FL   |  No CpG *W*            |
+… with 688 more lines
+27:Index
+34:Index
+53:Index
+62:Index
+64:Index
+66:Index
+86:Index
+145:Index
+147:Index
+204:Index
+206:Index
+208:Index
+221:Index
+235:Index
+237:Index
+239:Index
+242:Index
+244:Index
+246:Index
+255:Index
+268:Index
+270:Index
+282:Index
+284:Index
+286:Index
+298:Index
+304:Index
+359:Index
+361:Index
+393:Index
+444:Index
+457:Index
+493:Index
+495:Index
+497:Index
+500:Index
+514:Index
+516:Index
+527:Index
+564:Index
+576:Index
+623:Index
+628:Index
+691:Index
+697:Index
+709:Index
+46

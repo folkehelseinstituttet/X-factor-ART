@@ -1,0 +1,672 @@
+TF_name	part_tested	class	note
+TFAP2A	FL	MethylMinus	NA
+TFAP2B	DBD	MethylMinus	NA
+TFAP2C	DBD	MethylMinus	NA
+TFAP2E	FL	MethylMinus	NA
+GRHL1	DBD	MethylPlus	C
+TFCP2	DBD	MethylPlus	C
+TFCP2	FL	MethylPlus	W
+TFCP2L1	DBD	MethylPlus	C
+UBP1	DBD	MethylPlus	C
+YBX1	DBD	No CpG	NA
+CUX1	DBD	MethylMinus	NA
+CUX2	DBD	Inconclusive	NA
+ONECUT1	DBD	MethylMinus	NA
+ONECUT1	FL	MethylMinus	NA
+ONECUT2	DBD	MethylMinus	NA
+ONECUT2	FL	MethylMinus	NA
+ONECUT3	DBD	MethylMinus	NA
+ARNT2	DBD	MethylMinus	NA
+ARNTL	DBD	MethylMinus	NA
+ASCL1	DBD	No CpG	NA
+ASCL2	DBD	No CpG	NA
+ASCL2	FL	MethylMinus	S
+ATOH1	DBD	No CpG	NA
+ATOH7	DBD	No CpG	N
+BHLHA15	DBD	No CpG	NA
+BHLHE22	DBD	No CpG	NA
+BHLHE23	DBD	No CpG	NA
+BHLHE23	FL	No CpG	W
+BHLHE40	DBD	MethylMinus	NA
+BHLHE41	DBD	MethylMinus	C
+CLOCK	DBD	Multiple effects	NA
+FERD3L	FL	No CpG	NA
+FIGLA	DBD	No CpG	NA
+HAND2	DBD	No CpG	A
+HES1	DBD	MethylMinus	NA
+HES2	DBD	MethylMinus	NA
+HES5	DBD	MethylMinus	C
+HES6	FL	MethylMinus	NA
+HES7	DBD	MethylMinus	C
+HEY1	DBD	MethylMinus	NA
+HEY1	FL	MethylMinus	NA
+HEY2	DBD	MethylMinus	NA
+HEY2	FL	MethylMinus	NA
+MAX	DBD	MethylMinus	NA
+MAX	FL	MethylMinus	NA
+MESP2	DBD	No CpG	W
+MLX	DBD	MethylMinus	NA
+MLX	FL	MethylMinus	NA
+MSC	DBD	No CpG	NA
+MSC	FL	No CpG	NA
+MSGN1	DBD	No CpG	NA
+MYCN	DBD	MethylMinus	NA
+MYF6	DBD	MethylPlus	S
+MYOD1	DBD	Little effect	S
+MYOD1	FL	Little effect	S
+MYOG	DBD	Little effect	S
+MYOG	FL	Little effect	S
+NEUROD1	FL	No CpG	NA
+NEUROD2	FL	No CpG	NA
+NEUROG1	DBD	No CpG	NA
+NEUROG1	FL	No CpG	NA
+NEUROG2	DBD	No CpG	NA
+NEUROG2	FL	No CpG	W
+NHLH1	DBD	Little effect	W
+NHLH1	FL	Little effect	W
+NHLH2	FL	Little effect	C
+NPAS2	DBD	Multiple effects	NA
+OLIG2	DBD	No CpG	NA
+OLIG3	DBD	No CpG	NA
+OLIG3	FL	No CpG	NA
+PTF1A	DBD	Little effect	SA
+SOHLH2	DBD	MethylMinus	C
+SREBF1	DBD	MethylMinus	NA
+SREBF2	DBD	MethylMinus	NA
+TCF12	DBD	MethylMinus	NA
+TCF21	DBD	No CpG	NA
+TCF4	DBD	MethylMinus	C
+TCFL5	DBD	MethylMinus	C
+TFAP4	DBD	No CpG	NA
+TFAP4	FL	No CpG	NA
+TFE3	DBD	MethylMinus	NA
+TFEB	DBD	MethylMinus	NA
+TFEC	DBD	MethylMinus	NA
+USF1	FL	MethylMinus	NA
+USF2	DBD	MethylMinus	NA
+ATF2	DBD	MethylMinus	NA
+ATF2	FL	MethylMinus	NA
+ATF3	DBD	MethylMinus	NA
+ATF3	FL	MethylMinus	NA
+ATF4	DBD	MethylMinus	NA
+ATF4	FL	MethylMinus	NA
+ATF6	DBD	MethylMinus	NA
+ATF6B	DBD	MethylMinus	NA
+ATF7	DBD	MethylMinus	NA
+BACH2	DBD	MethylMinus	NA
+BATF	FL	No CpG	W
+BATF3	DBD	Inconclusive	NA
+BATF3	FL	Inconclusive	NA
+CEBPB	DBD	MethylPlus	C
+CEBPD	DBD	Little effect	NA
+CEBPE	DBD	MethylPlus	C
+CEBPG	DBD	MethylPlus	C
+CEBPG	FL	MethylPlus	C
+CREB1	DBD	MethylMinus	NA
+CREB1	FL	MethylMinus	NA
+CREB3	FL	MethylMinus	NA
+CREB3L1	DBD	Motif dependent	M
+CREB3L1	FL	Motif dependent	M
+CREB3L4	DBD	MethylMinus	NA
+CREB5	DBD	MethylMinus	NA
+CREB5	FL	MethylMinus	NA
+CREM	DBD	MethylMinus	NA
+DBP	DBD	Inconclusive	NA
+DBP	FL	Inconclusive	NA
+FOS	DBD	MethylMinus	NA
+FOSB	DBD	Inconclusive	NA
+FOSL1	FL	Motif dependent	M
+HLF	FL	MethylPlus	C
+JDP2	DBD	Inconclusive	NA
+JDP2	FL	Inconclusive	NA
+JUN	FL	MethylMinus	NA
+JUNB	DBD	MethylMinus	NA
+JUND	DBD	MethylMinus	NA
+MAF	DBD	No CpG	WB
+MAF	FL	MethylMinus	NA
+MAFA	DBD	MethylMinus	NA
+MAFF	DBD	MethylMinus	NA
+MAFF	FL	MethylMinus	NA
+MAFG	DBD	MethylMinus	S
+MAFG	FL	MethylMinus	N
+NFE2	DBD	No CpG	NA
+NRL	DBD	No CpG	S
+NRL	FL	No CpG	S
+TEF	DBD	MethylMinus	NA
+XBP1	FL	MethylMinus	NA
+DMRT1	FL	No CpG	B
+DMRT3	DBD	No CpG	NA
+DMRTA1	FL	No CpG	NA
+DMRTA2	DBD	No CpG	NA
+DMRTC2	DBD	MethylMinus	NA
+DMRTC2	FL	MethylMinus	NA
+E2F1	FL	MethylMinus	NA
+E2F2	DBD	Motif dependent	M
+E2F3	DBD	Little effect	NA
+E2F4	DBD	MethylMinus	NA
+E2F7	DBD	MethylMinus	NA
+E2F8	DBD	Little effect	NA
+ELF1	DBD	MethylMinus	NA
+ELF1	FL	MethylMinus	C
+ELF2	DBD	MethylMinus	NA
+ELF2	FL	MethylMinus	NA
+ELF3	DBD	MethylMinus	NA
+ELF3	FL	MethylMinus	NA
+ELF4	DBD	MethylMinus	NA
+ELF5	DBD	MethylMinus	NA
+ELF5	FL	MethylMinus	NA
+ELK1	DBD	MethylMinus	NA
+ELK1	FL	MethylMinus	C
+ELK3	DBD	MethylMinus	C
+ELK3	FL	MethylMinus	C
+ELK4	FL	MethylMinus	NA
+ERG	DBD	MethylMinus	NA
+ERG	FL	MethylMinus	NA
+ETS2	FL	MethylMinus	NA
+ETV1	DBD	MethylMinus	NA
+ETV1	FL	MethylMinus	NA
+ETV2	DBD	MethylMinus	NA
+ETV3	DBD	MethylMinus	NA
+ETV4	DBD	MethylMinus	C
+ETV4	FL	MethylMinus	C
+ETV5	DBD	MethylMinus	NA
+ETV7	FL	MethylMinus	NA
+FEV	DBD	MethylMinus	NA
+FLI1	DBD	MethylMinus	NA
+FLI1	FL	MethylMinus	NA
+GABPA	DBD	MethylMinus	C
+SPDEF	DBD	MethylMinus	NA
+SPDEF	FL	MethylMinus	NA
+SPIB	DBD	MethylMinus	NA
+SPIB	FL	MethylMinus	NA
+GATA1	DBD	No CpG	NA
+GATA2	DBD	No CpG	B
+GATA3	FL	MethylPlus	S
+GATA4	DBD	No CpG	B
+GATA5	DBD	MethylPlus	S
+GATA5	FL	MethylPlus	S
+GATA6	DBD	Little effect	S
+GCM1	DBD	Inconclusive	NA
+GCM2	FL	Inconclusive	NA
+FOXA1	DBD	No CpG	NA
+FOXA1	FL	No CpG	NA
+FOXA2	DBD	No CpG	NA
+FOXA3	FL	No CpG	NA
+FOXB1	DBD	No CpG	NA
+FOXC2	DBD	No CpG	NA
+FOXD2	DBD	No CpG	NA
+FOXD3	DBD	No CpG	NA
+FOXE1	DBD	No CpG	NA
+FOXG1	DBD	MethylPlus	NA
+FOXI1	DBD	No CpG	NA
+FOXI1	FL	No CpG	W
+FOXJ2	DBD	No CpG	NA
+FOXJ3	DBD	MethylPlus	NA
+FOXK1	DBD	No CpG	NA
+FOXL2	FL	MethylPlus	NA
+FOXN2	DBD	MethylMinus	W
+FOXO3	DBD	No CpG	A
+FOXO4	DBD	No CpG	NA
+FOXP1	DBD	No CpG	NA
+FOXP3	FL	MethylMinus	N
+FOXQ1	DBD	No CpG	W
+FOXR2	FL	No CpG	NA
+BBX	DBD	No CpG	A
+LEF1	DBD	MethylMinus	C
+LEF1	FL	MethylMinus	NA
+SOX10	DBD	No CpG	NA
+SOX10	FL	No CpG	NA
+SOX12	DBD	MethylMinus	N
+SOX14	DBD	No CpG	NA
+SOX14	FL	MethylMinus	NA
+SOX18	DBD	No CpG	NA
+SOX3	FL	No CpG	NA
+SOX30	DBD	No CpG	NA
+SOX4	DBD	No CpG	NA
+SOX7	DBD	No CpG	NA
+SOX8	DBD	No CpG	NA
+SOX8	FL	No CpG	NA
+SOX9	DBD	No CpG	NA
+TCF7	DBD	MethylMinus	NA
+TCF7L1	DBD	MethylMinus	NA
+ALX1	FL	No CpG	NA
+ALX3	DBD	MethylPlus	NA
+ALX3	FL	MethylPlus	S
+ALX4	DBD	MethylPlus	S
+ARGFX	DBD	No CpG	NA
+ARX	DBD	No CpG	NA
+BARHL1	DBD	MethylMinus	NA
+BARHL2	DBD	MethylMinus	NA
+BARHL2	FL	MethylMinus	NA
+BARX2	FL	No CpG	NA
+BSX	DBD	MethylMinus	NA
+CDX1	DBD	MethylPlus	NA
+CDX2	DBD	MethylPlus	NA
+CDX4	FL	MethylPlus	NA
+CRX	FL	No CpG	B
+DLX1	DBD	No CpG	NA
+DLX1	FL	No CpG	NA
+DLX2	DBD	No CpG	NA
+DLX2	FL	No CpG	NA
+DLX3	DBD	MethylPlus	S
+DLX3	FL	MethylPlus	S
+DLX4	DBD	MethylPlus	NA
+DLX4	FL	MethylPlus	NA
+DLX5	DBD	MethylPlus	NA
+DLX5	FL	MethylPlus	S
+DLX6	DBD	MethylPlus	NA
+DMBX1	DBD	No CpG	B
+DPRX	DBD	No CpG	NA
+DRGX	DBD	No CpG	NA
+DUXA	DBD	No CpG	NA
+EMX1	DBD	No CpG	NA
+EMX1	FL	No CpG	NA
+EMX2	DBD	No CpG	NA
+EN1	DBD	MethylPlus	NA
+EN2	DBD	MethylPlus	S
+ESX1	DBD	No CpG	B
+ESX1	FL	No CpG	NA
+EVX1	DBD	MethylPlus	S
+EVX2	DBD	MethylPlus	S
+GBX2	DBD	MethylPlus	NA
+GBX2	FL	MethylPlus	NA
+GSC	DBD	No CpG	NA
+GSC	FL	No CpG	NA
+GSC2	DBD	No CpG	W
+GSX1	DBD	MethylPlus	S
+GSX2	DBD	MethylPlus	NA
+HESX1	FL	No CpG	NA
+HMBOX1	DBD	No CpG	NA
+HMX1	DBD	No CpG	NA
+HMX2	DBD	No CpG	NA
+HMX2	FL	No CpG	NA
+HOXA1	FL	MethylPlus	S
+HOXA10	DBD	MethylPlus	NA
+HOXA10	FL	MethylPlus	NA
+HOXA11	DBD	MethylPlus	C
+HOXA13	DBD	MethylPlus	NA
+HOXA13	FL	MethylPlus	NA
+HOXA2	DBD	MethylPlus	S
+HOXA2	FL	MethylPlus	S
+HOXA4	DBD	MethylPlus	S
+HOXA5	DBD	MethylPlus	S
+HOXA5	FL	MethylPlus	S
+HOXA6	DBD	MethylPlus	NA
+HOXA7	DBD	MethylPlus	NA
+HOXA9	FL	MethylPlus	NA
+HOXB1	DBD	MethylPlus	S
+HOXB13	DBD	MethylPlus	NA
+HOXB2	DBD	MethylPlus	S
+HOXB4	FL	MethylPlus	S
+HOXB5	DBD	MethylPlus	S
+HOXB5	FL	MethylPlus	S
+HOXB6	DBD	MethylPlus	NA
+HOXB7	DBD	MethylPlus	NA
+HOXB7	FL	MethylPlus	U
+HOXB8	DBD	MethylPlus	NA
+HOXB9	DBD	MethylPlus	NA
+HOXC10	DBD	MethylPlus	NA
+HOXC10	FL	MethylPlus	NA
+HOXC11	DBD	MethylPlus	AC
+HOXC11	FL	MethylPlus	C
+HOXC12	DBD	MethylPlus	C
+HOXC13	DBD	MethylPlus	C
+HOXC4	FL	MethylPlus	S
+HOXC8	FL	MethylPlus	NA
+HOXC9	FL	MethylPlus	NA
+HOXD1	DBD	MethylPlus	S
+HOXD10	DBD	MethylPlus	NA
+HOXD10	FL	MethylPlus	N
+HOXD11	DBD	MethylPlus	C
+HOXD12	DBD	MethylPlus	C
+HOXD13	DBD	MethylPlus	C
+HOXD3	FL	MethylPlus	S
+HOXD4	DBD	MethylPlus	S
+HOXD4	FL	MethylPlus	NS
+HOXD8	DBD	MethylPlus	NA
+HOXD9	DBD	MethylPlus	NA
+HOXD9	FL	MethylPlus	NA
+IRX1	DBD	MethylPlus	WC
+IRX3	DBD	MethylPlus	NA
+IRX5	DBD	MethylPlus	NA
+ISL1	DBD	No CpG	NA
+ISL1	FL	No CpG	NA
+ISL2	DBD	No CpG	NA
+ISX	DBD	MethylPlus	S
+ISX	FL	MethylPlus	S
+LBX2	DBD	MethylPlus	NA
+LHX1	DBD	MethylPlus	NA
+LHX4	DBD	MethylPlus	S
+LHX4	FL	MethylPlus	S
+LHX5	FL	MethylPlus	S
+LHX6	FL	MethylPlus	NA
+LHX8	FL	MethylPlus	NA
+LHX9	DBD	MethylPlus	NA
+LHX9	FL	MethylPlus	NA
+LMX1A	DBD	MethylPlus	NA
+LMX1B	DBD	MethylPlus	NA
+LMX1B	FL	MethylPlus	S
+MEOX1	FL	Little effect	S
+MEOX2	FL	Little effect	S
+MIXL1	FL	MethylPlus	S
+MNX1	DBD	MethylPlus	S
+MSX1	DBD	MethylPlus	N
+MSX1	FL	MethylPlus	S
+MSX2	DBD	MethylPlus	S
+"NANOG"	DBD	MethylPlus	W
+NKX2−3	DBD	MethylPlus	S
+NKX2−3	FL	MethylPlus	S
+NKX2−5	FL	MethylPlus	S
+NKX2−8	FL	MethylPlus	NA
+NKX3−1	DBD	MethylPlus	S
+NKX3−2	DBD	MethylPlus	S
+NKX6−2	DBD	No CpG	NA
+NKX6−2	FL	No CpG	NA
+NKX6−3	DBD	No CpG	NA
+NOTO	DBD	No CpG	B
+OTX1	DBD	No CpG	B
+OTX1	FL	No CpG	B
+OTX2	FL	No CpG	NA
+PBX1	DBD	MethylPlus	WC
+PBX1	FL	MethylPlus	W
+PDX1	DBD	MethylPlus	S
+PHOX2A	DBD	No CpG	B
+PHOX2B	DBD	No CpG	B
+PHOX2B	FL	No CpG	NA
+PITX1	DBD	No CpG	NA
+PITX1	FL	No CpG	NA
+PITX2	DBD	No CpG	B
+PITX2	FL	No CpG	NA
+PITX3	DBD	No CpG	NA
+PROP1	DBD	MethylPlus	NA
+PROP1	FL	MethylPlus	NA
+PROX1	DBD	MethylMinus	NA
+PRRX2	DBD	MethylPlus	S
+PRRX2	FL	MethylPlus	S
+RAX	DBD	MethylPlus	S
+RHOXF1	FL	No CpG	NA
+RHOXF2	FL	No CpG	NA
+SHOX	DBD	MethylPlus	NA
+SIX1	DBD	Little effect	W
+SIX1	FL	Little effect	NA
+SIX2	DBD	Little effect	NA
+SIX2	FL	Little effect	NA
+SIX3	DBD	Little effect	W
+SIX4	DBD	Little effect	W
+SIX6	DBD	Little effect	NA
+TLX2	DBD	No CpG	NA
+TLX3	DBD	No CpG	A
+TLX3	FL	No CpG	A
+UNCX	DBD	MethylPlus	NA
+VAX1	DBD	No CpG	NA
+VAX2	FL	No CpG	NA
+VENTX	FL	MethylMinus	NA
+VSX1	DBD	MethylPlus	NA
+VSX1	FL	MethylPlus	NA
+VSX2	DBD	MethylPlus	S
+VSX2	FL	MethylPlus	S
+MEIS2	DBD	MethylPlus	C
+MEIS2	FL	MethylPlus	NS
+MEIS3	DBD	MethylPlus	C
+PKNOX1	DBD	MethylPlus	C
+PKNOX1	FL	MethylPlus	NS
+PKNOX2	DBD	MethylPlus	C
+TGIF1	DBD	No CpG	NA
+TGIF2	DBD	No CpG	NA
+TGIF2	FL	No CpG	B
+TGIF2LX	DBD	MethylPlus	S
+TGIF2LX	FL	MethylPlus	S
+TGIF2LY	DBD	MethylPlus	C
+POU1F1	DBD	MethylPlus	S
+POU2F2	DBD	MethylPlus	S
+POU2F3	DBD	MethylPlus	S
+POU3F1	DBD	MethylPlus	WC
+POU3F2	DBD	MethylPlus	NA
+POU3F4	DBD	MethylPlus	NA
+POU4F1	DBD	No CpG	NA
+POU4F3	DBD	No CpG	NA
+POU4F3	FL	No CpG	NA
+POU5F1	FL	MethylPlus	NA
+POU6F1	FL	MethylPlus	S
+HSF1	DBD	Inconclusive	NA
+HSF1	FL	Inconclusive	NA
+HSF2	DBD	Multiple effects	NA
+HSF2	FL	Multiple effects	NA
+HSF4	DBD	Multiple effects	NA
+HSF5	DBD	MethylMinus	NA
+HSFY1	DBD	MethylMinus	NA
+HSFY2	DBD	MethylMinus	NA
+IRF2	FL	MethylPlus	C
+IRF3	DBD	Inconclusive	NA
+IRF3	FL	Inconclusive	NA
+IRF4	FL	Multiple effects	NA
+IRF5	DBD	Little effect	NA
+IRF5	FL	Little effect	NA
+IRF6	DBD	MethylPlus	C
+IRF6	FL	MethylPlus	W
+IRF7	DBD	MethylMinus	NA
+IRF8	DBD	Inconclusive	NA
+IRF8	FL	Inconclusive	NA
+IRF9	FL	Multiple effects	NA
+SMAD5	DBD	MethylPlus	A
+MEF2B	DBD	No CpG	W
+MEF2B	FL	No CpG	B
+MEF2C	FL	No CpG	B
+MEF2D	DBD	No CpG	NA
+SRF	DBD	No CpG	B
+ESR1	DBD	MethylPlus	WC
+ESR1	FL	MethylPlus	WC
+ESRRA	DBD	No CpG	NA
+ESRRA	FL	No CpG	NA
+ESRRB	DBD	No CpG	NA
+ESRRG	DBD	No CpG	NA
+ESRRG	FL	No CpG	NA
+HNF4A	DBD	No CpG	NA
+NR1D1	DBD	No CpG	NA
+NR1D2	DBD	No CpG	NA
+NR1I2	DBD	MethylPlus	NA
+NR1I3	FL	MethylPlus	NA
+NR2C1	DBD	MethylPlus	C
+NR2C2	DBD	No CpG	W
+NR2E1	FL	No CpG	NA
+NR2F1	DBD	MethylPlus	S
+NR2F1	FL	MethylPlus	S
+NR2F6	DBD	MethylPlus	NA
+NR2F6	FL	MethylPlus	S
+NR3C1	DBD	MethylPlus	S
+NR3C2	DBD	MethylPlus	C
+NR4A1	DBD	No CpG	NA
+NR4A2	DBD	No CpG	NA
+NR5A1	FL	No CpG	NA
+NR5A2	DBD	No CpG	NA
+NR6A1	DBD	No CpG	NA
+PPARD	DBD	MethylPlus	S
+RARA	DBD	MethylPlus	C
+RARB	FL	MethylPlus	S
+RARG	DBD	MethylPlus	NA
+RARG	FL	No CpG	B
+RORB	DBD	MethylPlus	S
+RORC	DBD	No CpG	NA
+RXRA	DBD	No CpG	NA
+RXRB	DBD	MethylPlus	S
+RXRG	FL	MethylPlus	S
+THRB	DBD	MethylPlus	NA
+THRB	FL	MethylPlus	NA
+NFIB	FL	No CpG	B
+NFIC	FL	No CpG	B
+NFIX	FL	No CpG	B
+MYBL2	DBD	MethylMinus	C
+PAX1	DBD	MethylPlus	NA
+PAX2	DBD	MethylPlus	NA
+PAX3	DBD	Motif dependent	M
+PAX4	DBD	Little effect	NA
+PAX6	DBD	MethylPlus	NA
+PAX6	FL	MethylPlus	NA
+PAX7	DBD	Motif dependent	M
+PAX7	FL	Motif dependent	M
+PAX8	FL	MethylPlus	NA
+PAX9	DBD	MethylPlus	NA
+RFX1	DBD	No CpG	NA
+RFX2	DBD	No CpG	NA
+RFX3	DBD	No CpG	NA
+RFX4	DBD	No CpG	NA
+RFX5	DBD	Motif dependent	M
+RFX7	DBD	No CpG	W
+NFAT5	DBD	MethylPlus	NA
+NFATC1	DBD	MethylPlus	NA
+NFATC2	DBD	MethylPlus	NA
+NFATC3	DBD	MethylPlus	NA
+NFATC4	DBD	MethylPlus	NA
+NFKB2	DBD	No CpG	NA
+RUNX2	DBD	MethylMinus	NA
+RUNX3	FL	MethylMinus	NA
+GMEB1	FL	MethylMinus	C
+GMEB2	DBD	MethylMinus	C
+SKOR1	DBD	No CpG	NA
+SKOR2	DBD	No CpG	NA
+EOMES	DBD	No CpG	NA
+T	DBD	No CpG	NA
+TBX1	DBD	No CpG	W
+TBX15	DBD	No CpG	U
+TBX18	DBD	No CpG	U
+TBX19	DBD	No CpG	NA
+TBX2	DBD	No CpG	WB
+TBX20	DBD	MethylPlus	U
+TBX20	FL	MethylPlus	NA
+TBX21	DBD	No CpG	NA
+TBX3	DBD	No CpG	NA
+TBX6	DBD	No CpG	A
+TEAD1	FL	No CpG	B
+TEAD2	FL	No CpG	B
+BCL6	DBD	Motif dependent	M
+BCL6B	DBD	Motif dependent	M
+HIC1	DBD	No CpG	NA
+ZBTB12	DBD	Motif dependent	M
+ZBTB14	DBD	MethylMinus	NA
+ZBTB14	FL	MethylMinus	W
+ZBTB18	DBD	No CpG	NA
+ZBTB2	DBD	MethylMinus	NA
+ZBTB20	DBD	MethylPlus	C
+ZBTB22	DBD	No CpG	NA
+ZBTB32	DBD	No CpG	NA
+ZBTB33	DBD	MethylPlus	NA
+ZBTB37	DBD	MethylPlus	NA
+ZBTB43	DBD	No CpG	B
+ZBTB45	DBD	No CpG	NA
+ZBTB7A	DBD	MethylMinus	C
+ZBTB7B	DBD	MethylMinus	C
+ZFP1	DBD	No CpG	U
+ZNF12	DBD	MethylPlus	NA
+ZNF140	DBD	Little effect	NA
+ZNF177	DBD	Inconclusive	NA
+ZNF23	DBD	MethylPlus	S
+ZNF250	DBD	No CpG	NA
+ZNF274	DBD	MethylPlus	S
+ZNF282	DBD	No CpG	UW
+ZNF343	DBD	Multiple effects	NA
+ZNF454	DBD	Little effect	NA
+ZNF460	DBD	MethylMinus	NA
+ZNF597	FL	Inconclusive	NA
+ZNF684	FL	MethylPlus	S
+ZNF713	DBD	MethylPlus	NA
+ZNF75A	DBD	No CpG	NA
+ZNF75A	FL	No CpG	A
+ZNF174	DBD	MethylPlus	NA
+ZNF263	DBD	No CpG	NA
+ZNF323	FL	MethylPlus	NA
+ZNF396	FL	MethylMinus	NA
+ZNF444	FL	MethylPlus	S
+ZNF449	DBD	Motif dependent	M
+ZSCAN1	DBD	Inconclusive	NA
+ZSCAN16	DBD	No CpG	NA
+ZSCAN16	FL	No CpG	NA
+ZSCAN23	DBD	No CpG	NA
+ZSCAN29	DBD	Multiple effects	WC
+ZSCAN4	DBD	Inconclusive	NA
+ZSCAN5	DBD	No CpG	NA
+ZSCAN9	DBD	No CpG	NA
+BCL11B	DBD	Little effect	W
+EGR1	DBD	Little effect	NA
+EGR2	FL	Little effect	NA
+EGR3	FL	Little effect	NA
+EGR4	DBD	MethylPlus	C
+GFI1	DBD	MethylMinus	S
+GFI1B	DBD	No CpG	S
+GLI2	DBD	Multiple effects	S
+GLI3	DBD	Multiple effects	S
+GLIS1	DBD	MethylMinus	S
+GLIS2	DBD	MethylMinus	NA
+KLF10	DBD	MethylPlus	NA
+KLF11	DBD	MethylPlus	C
+KLF12	FL	MethylPlus	C
+KLF13	DBD	MethylPlus	C
+KLF13	FL	MethylPlus	C
+KLF14	DBD	MethylPlus	C
+KLF15	DBD	MethylPlus	NA
+KLF15	FL	MethylPlus	NA
+KLF16	DBD	MethylPlus	C
+KLF17	DBD	Motif dependent	M
+KLF2	DBD	Little effect	N
+KLF3	FL	Motif dependent	M
+KLF4	DBD	Little effect	NA
+KLF5	DBD	Little effect	N
+KLF6	DBD	MethylPlus	C
+MTF1	DBD	Little effect	NA
+OSR1	DBD	Little effect	S
+OSR2	DBD	Inconclusive	NA
+OVOL1	FL	MethylMinus	C
+OVOL2	DBD	MethylMinus	C
+OVOL2	FL	MethylMinus	C
+SCRT1	DBD	MethylPlus	C
+SCRT2	DBD	MethylPlus	NA
+SNAI1	DBD	MethylPlus	NA
+SNAI1	FL	MethylPlus	NA
+SNAI2	DBD	MethylPlus	NA
+SNAI2	FL	MethylPlus	NA
+SNAI3	FL	MethylPlus	NA
+SP1	DBD	MethylPlus	C
+SP2	DBD	MethylPlus	C
+SP3	DBD	Little effect	NA
+SP8	DBD	Little effect	NA
+SP9	DBD	Little effect	NA
+YY1	FL	Motif dependent	M
+YY2	FL	Multiple effects	NA
+ZBTB26	FL	No CpG	N
+ZFP41	FL	Inconclusive	NA
+ZFP42	DBD	Multiple effects	NA
+ZIC1	DBD	Inconclusive	NA
+ZIC1	FL	Inconclusive	NA
+ZIC3	DBD	Inconclusive	NA
+ZIC3	FL	Inconclusive	NA
+ZIC4	DBD	Inconclusive	NA
+ZIC5	DBD	Inconclusive	NA
+ZNF276	DBD	No CpG	NA
+ZNF281	DBD	No CpG	U
+ZNF296	DBD	No CpG	W
+ZNF32	FL	MethylPlus	S
+ZNF345	DBD	Multiple effects	NA
+ZNF384	DBD	No CpG	NA
+ZNF410	DBD	No CpG	NA
+ZNF501	FL	MethylMinus	W
+ZNF524	FL	MethylPlus	C
+ZNF580	DBD	No CpG	UW
+ZNF580	FL	No CpG	NA
+ZNF660	FL	No CpG	NA
+ZNF704	FL	MethylMinus	NA
+ZNF740	DBD	MethylPlus	S
+ZNF740	FL	MethylPlus	S
+ZNF76	DBD	Inconclusive	NA
+ZNF771	DBD	MethylPlus	C
+ZNF771	FL	MethylPlus	C
+ZNF784	FL	MethylPlus	C
+ZNF787	FL	No CpG	S
+ZNF821	FL	MethylPlus	S
+CPSF4	FL	No CpG	NA
+DPF1	DBD	No CpG	NA
+LIN28B	FL	MethylMinus	S
+MBNL2	FL	MethylMinus	NA
+PRDM1	DBD	No CpG	NA
+PRDM4	DBD	MethylPlus	NA
+XPA	FL	No CpG	W
+ZBED1	DBD	MethylMinus	NA
+ZNF385D	DBD	Little effect	W

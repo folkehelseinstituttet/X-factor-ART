@@ -1,0 +1,717 @@
+TFAP2A _ FL : MethylMinus
+TFAP2B _ DBD : MethylMinus
+TFAP2C _ DBD : MethylMinus
+TFAP2E _ FL : MethylMinus
+GRHL1 _ DBD : MethylPlus *C*
+TFCP2 _ DBD : MethylPlus *C*
+TFCP2 _ FL : MethylPlus *W*
+TFCP2L1 _ DBD : MethylPlus *C*
+UBP1 _ DBD : MethylPlus *C*
+YBX1 _ DBD : No CpG
+CUX1 _ DBD : MethylMinus
+CUX2 _ DBD : inconclusive
+ONECUT1 _ DBD : MethylMinus
+ONECUT1 _ FL : MethylMinus
+ONECUT2 _ DBD : MethylMinus
+ONECUT2 _ FL : MethylMinus
+ONECUT3 _ DBD : MethylMinus
+ARNT2 _ DBD : MethylMinus
+ARNTL _ DBD : MethylMinus
+ASCL1 _ DBD : No CpG
+ASCL2 _ DBD : No CpG
+ASCL2 _ FL : MethylMinus *S*
+ATOH1 _ DBD : No CpG
+ATOH7 _ DBD : No CpG *N*
+BHLHA15 _ DBD : No CpG
+BHLHE22 _ DBD : No CpG
+Index
+BHLHE23 _ DBD : No CpG
+BHLHE23 _ FL : No CpG *W*
+BHLHE40 _ DBD : MethylMinus
+BHLHE41 _ DBD : MethylMinus *C*
+CLOCK _ DBD : Multiple effects
+FERD3L _ FL : No CpG
+Index
+FIGLA _ DBD : No CpG
+HAND2 _ DBD : No CpG *A*
+HES1 _ DBD : MethylMinus
+HES2 _ DBD : MethylMinus
+HES5 _ DBD : MethylMinus *C*
+HES6 _ FL : MethylMinus
+HES7 _ DBD : MethylMinus *C*
+HEY1 _ DBD : MethylMinus
+HEY1 _ FL : MethylMinus
+HEY2 _ DBD : MethylMinus
+HEY2 _ FL : MethylMinus
+MAX _ DBD : MethylMinus
+MAX _ FL : MethylMinus
+MESP2 _ DBD : No CpG *W*
+MLX _ DBD : MethylMinus
+MLX _ FL : MethylMinus
+MSC _ DBD : No CpG
+MSC _ FL : No CpG
+Index
+MSGN1 _ DBD : No CpG
+MYCN _ DBD : MethylMinus
+MYF6 _ DBD : MethylPlus *S*
+MYOD1 _ DBD : Little effect *S*
+MYOD1 _ FL : Little effect *S*
+MYOG _ DBD : Little effect *S*
+MYOG _ FL : Little effect *S*
+NEUROD1 _ FL : No CpG
+Index
+NEUROD2 _ FL : No CpG
+Index
+NEUROG1 _ DBD : No CpG
+Index
+NEUROG1 _ FL : No CpG
+NEUROG2 _ DBD : No CpG
+NEUROG2 _ FL : No CpG *W*
+NHLH1 _ DBD : Little effect *W*
+NHLH1 _ FL : Little effect *W*
+NHLH2 _ FL : Little effect *C*
+NPAS2 _ DBD : Multiple effects
+OLIG2 _ DBD : No CpG
+OLIG3 _ DBD : No CpG
+OLIG3 _ FL : No CpG
+PTF1A _ DBD : Little effect *SA*
+SOHLH2 _ DBD : MethylMinus *C*
+SREBF1 _ DBD : MethylMinus
+SREBF2 _ DBD : MethylMinus
+TCF12 _ DBD : MethylMinus
+TCF21 _ DBD : No CpG
+TCF4 _ DBD : MethylMinus *C*
+TCFL5 _ DBD : MethylMinus *C*
+TFAP4 _ DBD : No CpG
+Index
+TFAP4 _ FL : No CpG
+TFE3 _ DBD : MethylMinus
+TFEB _ DBD : MethylMinus
+TFEC _ DBD : MethylMinus
+USF1 _ FL : MethylMinus
+USF2 _ DBD : MethylMinus
+ATF2 _ DBD : MethylMinus
+ATF2 _ FL : MethylMinus
+ATF3 _ DBD : MethylMinus
+ATF3 _ FL : MethylMinus
+ATF4 _ DBD : MethylMinus
+ATF4 _ FL : MethylMinus
+ATF6 _ DBD : MethylMinus
+ATF6B _ DBD : MethylMinus
+ATF7 _ DBD : MethylMinus
+BACH2 _ DBD : MethylMinus
+BATF _ FL : No CpG *W*
+BATF3 _ DBD : Inconclusive
+BATF3 _ FL : Inconclusive
+CEBPB _ DBD : MethylPlus *C*
+CEBPD _ DBD : Little effect
+CEBPE _ DBD : MethylPlus *C*
+CEBPG _ DBD : MethylPlus *C*
+CEBPG _ FL : MethylPlus *C*
+CREB1 _ DBD : MethylMinus
+CREB1 _ FL : MethylMinus
+CREB3 _ FL : MethylMinus
+CREB3L1 _ DBD : Motif dependent *M*
+CREB3L1 _ FL : Motif dependent *M*
+CREB3L4 _ DBD : MethylMinus
+CREB5 _ DBD : MethylMinus
+CREB5 _ FL : MethylMinus
+CREM _ DBD : MethylMinus
+DBP _ DBD : Inconclusive
+DBP _ FL : Inconclusive
+FOS _ DBD : MethylMinus
+FOSB _ DBD : Inconclusive
+FOSL1 _ FL : Motif dependent *M*
+HLF _ FL : MethylPlus *C*
+JDP2 _ DBD : inconclusive
+JDP2 _ FL : inconclusive
+JUN _ FL : MethylMinus
+JUNB _ DBD : MethylMinus
+JUND _ DBD : MethylMinus
+MAF _ DBD : No CpG *WB*
+MAF _ FL : MethylMinus
+MAFA _ DBD : MethylMinus
+MAFF _ DBD : MethylMinus
+MAFF _ FL : MethylMinus
+MAFG _ DBD : MethylMinus *S*
+MAFG _ FL : MethylMinus *N*
+NFE2 _ DBD : No CpG
+NRL _ DBD : No CpG *S*
+NRL _ FL : No CpG *S*
+TEF _ DBD : MethylMinus
+XBP1 _ FL : MethylMinus
+DMRT1 _ FL : No CpG *B*
+DMRT3 _ DBD : No CpG
+Index
+DMRTA1 _ FL : No CpG
+Index
+DMRTA2 _ DBD : No CpG
+DMRTC2 _ DBD : MethylMinus
+DMRTC2 _ FL : MethylMinus
+E2F1 _ FL : MethylMinus
+E2F2 _ DBD : Motif dependent *M*
+E2F3 _ DBD : Little effect
+E2F4 _ DBD : MethylMinus
+E2F7 _ DBD : MethylMinus
+E2F8 _ DBD : Little effect
+ELF1 _ DBD : MethylMinus
+ELF1 _ FL : MethylMinus *C*
+ELF2 _ DBD : MethylMinus
+ELF2 _ FL : MethylMinus
+ELF3 _ DBD : MethylMinus
+ELF3 _ FL : MethylMinus
+ELF4 _ DBD : MethylMinus
+ELF5 _ DBD : MethylMinus
+ELF5 _ FL : MethylMinus
+ELK1 _ DBD : MethylMinus
+ELK1 _ FL : MethylMinus *C*
+ELK3 _ DBD : MethylMInus *C*
+ELK3 _ FL : MethylMinus *C*
+ELK4 _ FL : MethylMinus
+ERG _ DBD : MethylMinus
+ERG _ FL : MethylMinus
+ETS2 _ FL : MethylMinus
+ETV1 _ DBD : MethylMinus
+ETV1 _ FL : MethylMinus
+ETV2 _ DBD : MethylMinus
+ETV3 _ DBD : MethylMinus
+ETV4 _ DBD : MethylMinus *C*
+ETV4 _ FL : MethylMinus *C*
+ETV5 _ DBD : MethylMinus
+ETV7 _ FL : MethylMinus
+FEV _ DBD : MethylMinus
+FLI1 _ DBD : MethylMinus
+FLI1 _ FL : MethylMinus
+GABPA _ DBD : MethylMinus *C*
+SPDEF _ DBD : MethylMinus
+SPDEF _ FL : MethylMinus
+SPIB _ DBD : MethylMinus
+SPIB _ FL : MethylMinus
+GATA1 _ DBD : No CpG
+GATA2 _ DBD : No CpG *B*
+GATA3 _ FL : MethylPlus *S*
+GATA4 _ DBD : No CpG *B*
+GATA5 _ DBD : MethylPlus *S*
+GATA5 _ FL : MethylPlus *S*
+GATA6 _ DBD : Little effect *S*
+GCM1 _ DBD : Inconclusive
+GCM2 _ FL : Inconclusive
+FOXA1 _ DBD : No CpG
+FOXA1 _ FL : No CpG
+FOXA2 _ DBD : No CpG
+FOXA3 _ FL : No CpG
+FOXB1 _ DBD : No CpG
+Index
+FOXC2 _ DBD : No CpG
+Index
+FOXD2 _ DBD : No CpG
+Index
+FOXD3 _ DBD : No CpG
+FOXE1 _ DBD : No CpG
+FOXG1 _ DBD : MethylPlus
+FOXI1 _ DBD : No CpG
+FOXI1 _ FL : No CpG *W*
+FOXJ2 _ DBD : No CpG
+FOXJ3 _ DBD : MethylPlus
+FOXK1 _ DBD : No CpG
+FOXL2 _ FL : MethylPlus
+FOXN2 _ DBD : MethylMinus *W*
+FOXO3 _ DBD : No CpG *A*
+FOXO4 _ DBD : No CpG
+Index
+FOXP1 _ DBD : No CpG
+FOXP3 _ FL : MethylMinus *N*
+FOXQ1 _ DBD : No CpG *W*
+FOXR2 _ FL : No CpG
+BBX _ DBD : No CpG *A*
+LEF1 _ DBD : MethylMinus *C*
+LEF1 _ FL : MethylMinus
+SOX10 _ DBD : No CpG
+SOX10 _ FL : No CpG
+SOX12 _ DBD : MethylMinus *N*
+SOX14 _ DBD : No CpG
+SOX14 _ FL : MethylMinus
+SOX18 _ DBD : No CpG
+Index
+SOX3 _ FL : No CpG
+Index
+SOX30 _ DBD : No CpG
+Index
+SOX4 _ DBD : No CpG
+SOX7 _ DBD : No CpG
+Index
+SOX8 _ DBD : No CpG
+Index
+SOX8 _ FL : No CpG
+Index
+SOX9 _ DBD : No CpG
+TCF7 _ DBD : MethylMinus
+TCF7L1 _ DBD : MethylMinus
+ALX1 _ FL : No CpG
+ALX3 _ DBD : MethylPlus
+ALX3 _ FL : MethylPlus *S*
+ALX4 _ DBD : MethylPlus *S*
+ARGFX _ DBD : No CpG
+Index
+ARX _ DBD : No CpG
+BARHL1 _ DBD : MethylMinus
+BARHL2 _ DBD : MethylMinus
+BARHL2 _ FL : MethylMinus
+BARX2 _ FL : No CpG
+BSX _ DBD : MethylMinus
+CDX1 _ DBD : MethylPlus
+CDX2 _ DBD : MethylPlus
+CDX4 _ FL : MethylPlus
+CRX _ FL : No CpG *B*
+DLX1 _ DBD : No CpG
+DLX1 _ FL : No CpG
+Index
+DLX2 _ DBD : No CpG
+Index
+DLX2 _ FL : No CpG
+DLX3 _ DBD : MethylPlus *S*
+DLX3 _ FL : MethylPlus *S*
+DLX4 _ DBD : MethylPlus
+DLX4 _ FL : MethylPlus
+DLX5 _ DBD : MethylPlus
+DLX5 _ FL : MethylPlus *S*
+DLX6 _ DBD : MethylPlus
+DMBX1 _ DBD : No CpG *B*
+DPRX _ DBD : No CpG
+DRGX _ DBD : No CpG
+Index
+DUXA _ DBD : No CpG
+Index
+EMX1 _ DBD : No CpG
+Index
+EMX1 _ FL : No CpG
+EMX2 _ DBD : No CpG
+EN1 _ DBD : MethylPlus
+EN2 _ DBD : MethylPlus *S*
+ESX1 _ DBD : No CpG *B*
+ESX1 _ FL : No CpG
+EVX1 _ DBD : MethylPlus *S*
+EVX2 _ DBD : MethylPlus *S*
+GBX2 _ DBD : MethylPlus
+GBX2 _ FL : MethylPlus
+GSC _ DBD : No CpG
+Index
+GSC _ FL : No CpG
+GSC2 _ DBD : No CpG *W*
+GSX1 _ DBD : MethylPlus *S*
+GSX2 _ DBD : MethylPlus
+HESX1 _ FL : No CpG
+Index
+HMBOX1 _ DBD : No CpG
+HMX1 _ DBD : No CpG
+HMX2 _ DBD : No CpG
+HMX2 _ FL : No CpG
+HOXA1 _ FL : MethylPlus *S*
+HOXA10 _ DBD : MethylPlus
+HOXA10 _ FL : MethylPlus
+HOXA11 _ DBD : MethylPlus *C*
+HOXA13 _ DBD : MethylPlus
+HOXA13 _ FL : MethylPlus
+HOXA2 _ DBD : MethylPlus *S*
+HOXA2 _ FL : MethylPlus *S*
+HOXA4 _ DBD : MethylPlus *S*
+HOXA5 _ DBD : MethylPlus *S*
+HOXA5 _ FL : MethylPlus *S*
+HOXA6 _ DBD : MethylPlus
+HOXA7 _ DBD : MethylPlus
+HOXA9 _ FL : MethylPlus
+HOXB1 _ DBD : MethylPlus *S*
+HOXB13 _ DBD : MethylPlus
+HOXB2 _ DBD : MethylPlus *S*
+HOXB4 _ FL : MethylPlus *S*
+HOXB5 _ DBD : MethylPlus *S*
+HOXB5 _ FL : MethylPlus *S*
+HOXB6 _ DBD : MethylPlus
+HOXB7 _ DBD : MethylPlus
+HOXB7 _ FL : MethylPlus *U*
+HOXB8 _ DBD : MethylPlus
+HOXB9 _ DBD : MethylPlus
+HOXC10 _ DBD : MethylPlus
+HOXC10 _ FL : MethylPlus
+HOXC11 _ DBD : MethylPlus *AC*
+HOXC11 _ FL : MethylPlus *C*
+HOXC12 _ DBD : MethylPlus *C*
+HOXC13 _ DBD : MethylPlus *C*
+HOXC4 _ FL : MethylPlus *S*
+HOXC8 _ FL : MethylPlus
+HOXC9 _ FL : MethylPlus
+HOXD1 _ DBD : MethylPlus *S*
+HOXD10 _ DBD : MethylPlus
+HOXD10 _ FL : MethylPlus *N*
+HOXD11 _ DBD : MethylPlus *C*
+HOXD12 _ DBD : MethylPlus *C*
+HOXD13 _ DBD : MethylPlus *C*
+HOXD3 _ FL : MethylPlus *S*
+HOXD4 _ DBD : MethylPlus *S*
+HOXD4 _ FL : MethylPlus *NS*
+HOXD8 _ DBD : MethylPlus
+HOXD9 _ DBD : MethylPlus
+HOXD9 _ FL : MethylPlus
+IRX1 _ DBD : MethylPlus *WC*
+IRX3 _ DBD : MethylPlus
+IRX5 _ DBD : MethylPlus
+ISL1 _ DBD : No CpG
+Index
+ISL1 _ FL : No CpG
+Index
+ISL2 _ DBD : No CpG
+ISX _ DBD : MethylPlus *S*
+ISX _ FL : MethylPlus *S*
+LBX2 _ DBD : MethylPlus
+LHX1 _ DBD : MethylPlus
+LHX4 _ DBD : MethylPlus *S*
+LHX4 _ FL : MethylPlus *S*
+LHX5 _ FL : MethylPlus *S*
+LHX6 _ FL : MethylPlus
+LHX8 _ FL : MethylPlus
+LHX9 _ DBD : MethylPlus
+LHX9 _ FL : MethylPlus
+LMX1A _ DBD : MethylPlus
+LMX1B _ DBD : MethylPlus
+LMX1B _ FL : MethylPlus *S*
+MEOX1 _ FL : Little effect *S*
+MEOX2 _ FL : Little effect *S*
+MIXL1 _ FL : MethylPlus *S*
+MNX1 _ DBD : MethylPlus *S*
+MSX1 _ DBD : MethylPlus *N*
+MSX1 _ FL : MethylPlus *S*
+MSX2 _ DBD : MethylPlus *S*
+NANOG _ DBD : MethylPlus *W*
+NKX2−3 _ DBD : MethylPlus *S*
+NKX2−3 _ FL : MethylPlus *S*
+NKX2−5 _ FL : MethylPlus *S*
+NKX2−8 _ FL : MethylPlus
+NKX3−1 _ DBD : MethylPlus *S*
+NKX3−2 _ DBD : MethylPlus *S*
+NKX6−2 _ DBD : No CpG
+NKX6−2 _ FL : No CpG
+Index
+NKX6−3 _ DBD : No CpG
+NOTO _ DBD : No CpG *B*
+OTX1 _ DBD : No CpG *B*
+OTX1 _ FL : No CpG *B*
+OTX2 _ FL : No CpG
+PBX1 _ DBD : MethylPlus *WC*
+PBX1 _ FL : MethylPlus *W*
+PDX1 _ DBD : MethylPlus *S*
+PHOX2A _ DBD : No CpG *B*
+PHOX2B _ DBD : No CpG *B*
+PHOX2B _ FL : No CpG
+PITX1 _ DBD : No CpG
+PITX1 _ FL : No CpG
+PITX2 _ DBD : No CpG *B*
+PITX2 _ FL : No CpG
+PITX3 _ DBD : No CpG
+PROP1 _ DBD : MethylPlus
+PROP1 _ FL : MethylPlus
+PROX1 _ DBD : MethylMinus
+PRRX2 _ DBD : MethylPlus *S*
+PRRX2 _ FL : MethylPlus *S*
+RAX _ DBD : MethylPlus *S*
+RHOXF1 _ FL : No CpG
+RHOXF2 _ FL : No CpG
+SHOX _ DBD : MethylPlus
+SIX1 _ DBD : Little effect *W*
+SIX1 _ FL : Little effect
+SIX2 _ DBD : Little effect
+SIX2 _ FL : Little effect
+SIX3 _ DBD : Little effect *W*
+SIX4 _ DBD : Little effect *W*
+SIX6 _ DBD : Little effect
+TLX2 _ DBD : No CpG
+TLX3 _ DBD : No CpG *A*
+TLX3 _ FL : No CpG *A*
+UNCX _ DBD : MethylPlus
+VAX1 _ DBD : No CpG
+VAX2 _ FL : No CpG
+VENTX _ FL : MethylMinus
+VSX1 _ DBD : MethylPlus
+VSX1 _ FL : MethylPlus
+VSX2 _ DBD : MethylPlus *S*
+VSX2 _ FL : MethylPlus *S*
+MEIS2 _ DBD : MethylPlus *C*
+MEIS2 _ FL : MethylPlus *SN*
+MEIS3 _ DBD : MethylPlus *C*
+PKNOX1 _ DBD : MethylPlus *C*
+PKNOX1 _ FL : MethylPlus *SN*
+PKNOX2 _ DBD : MethylPlus *C*
+TGIF1 _ DBD : No CpG
+Index
+TGIF2 _ DBD : No CpG
+TGIF2 _ FL : No CpG *B*
+TGIF2LX _ DBD : MethylPlus *S*
+TGIF2LX _ FL : MethylPlus *S*
+TGIF2LY _ DBD : MethylPlus *C*
+POU1F1 _ DBD : MethylPlus *S*
+POU2F2 _ DBD : MethylPlus *S*
+POU2F3 _ DBD : MethylPlus *S*
+POU3F1 _ DBD : MethylPlus *WC*
+POU3F2 _ DBD : MethylPlus
+POU3F4 _ DBD : MethylPlus
+POU4F1 _ DBD : No CpG
+Index
+POU4F3 _ DBD : No CpG
+POU4F3 _ FL : No CpG
+POU5F1 _ FL : MethylPlus
+POU6F1 _ FL : MethylPlus *S*
+HSF1 _ DBD : Inconclusive
+HSF1 _ FL : Inconclusive
+HSF2 _ DBD : Multiple effects
+HSF2 _ FL : Multiple effects
+HSF4 _ DBD : Multiple effects
+HSF5 _ DBD : MethylMinus
+HSFY1 _ DBD : MethylMinus
+HSFY2 _ DBD : MethylMinus
+IRF2 _ FL : MethylPlus *C*
+IRF3 _ DBD : inconclusive
+IRF3 _ FL : inconclusive
+IRF4 _ FL : Multiple effects
+IRF5 _ DBD : Little effect
+IRF5 _ FL : Little effect
+IRF6 _ DBD : MethylPlus *C*
+IRF6 _ FL : MethylPlus *W*
+IRF7 _ DBD : MethylMinus
+IRF8 _ DBD : inconclusive
+IRF8 _ FL : inconclusive
+IRF9 _ FL : Multiple effects
+SMAD5 _ DBD : MethylPlus *A*
+MEF2B _ DBD : No CpG *W*
+MEF2B _ FL : No CpG *B*
+MEF2C _ FL : No CpG *B*
+MEF2D _ DBD : No CpG
+SRF _ DBD : No CpG *B*
+ESR1 _ DBD : MethylPlus *WC*
+ESR1 _ FL : MethylPlus *WC*
+ESRRA _ DBD : No CpG
+ESRRA _ FL : No CpG
+ESRRB _ DBD : No CpG
+Index
+ESRRG _ DBD : No CpG
+Index
+ESRRG _ FL : No CpG
+Index
+HNF4A _ DBD : No CpG
+NR1D1 _ DBD : No CpG
+Index
+NR1D2 _ DBD : No CpG
+NR1I2 _ DBD : MethylPlus
+NR1I3 _ FL : MethylPlus
+NR2C1 _ DBD : MethylPlus *C*
+NR2C2 _ DBD : No CpG *W*
+NR2E1 _ FL : No CpG
+NR2F1 _ DBD : MethylPlus *S*
+NR2F1 _ FL : MethylPlus *S*
+NR2F6 _ DBD : MethylPlus
+NR2F6 _ FL : MethylPlus *S*
+NR3C1 _ DBD : MethylPlus *S*
+NR3C2 _ DBD : MethylPlus *C*
+NR4A1 _ DBD : No CpG
+Index
+NR4A2 _ DBD : No CpG
+Index
+NR5A1 _ FL : No CpG
+NR5A2 _ DBD : No CpG
+NR6A1 _ DBD : No CpG
+PPARD _ DBD : MethylPlus *S*
+RARA _ DBD : MethylPlus *C*
+RARB _ FL : MethylPlus *S*
+RARG _ DBD : MethylPlus
+RARG _ FL : No CpG *B*
+RORB _ DBD : MethylPlus *S*
+RORC _ DBD : No CpG
+Index
+RXRA _ DBD : No CpG
+RXRB _ DBD : MethylPlus *S*
+RXRG _ FL : MethylPlus *S*
+THRB _ DBD : MethylPlus
+THRB _ FL : MethylPlus
+NFIB _ FL : No CpG *B*
+NFIC _ FL : No CpG *B*
+NFIX _ FL : No CpG *B*
+MYBL2 _ DBD : MethylMinus *C*
+PAX1 _ DBD : MethylPlus
+PAX2 _ DBD : MethylPlus
+PAX3 _ DBD : Motif dependent *M*
+PAX4 _ DBD : Little effect
+PAX6 _ DBD : MethylPlus
+PAX6 _ FL : MethylPlus
+PAX7 _ DBD : Motif dependent *M*
+PAX7 _ FL : Motif dependent *M*
+PAX8 _ FL : MethylPlus
+PAX9 _ DBD : MethylPlus
+RFX1 _ DBD : No CpG
+RFX2 _ DBD : No CpG
+RFX3 _ DBD : No CpG
+RFX4 _ DBD : No CpG
+RFX5 _ DBD : Motif dependent *M*
+RFX7 _ DBD : No CpG *W*
+NFAT5 _ DBD : MethylPlus
+NFATC1 _ DBD : MethylPlus
+NFATC2 _ DBD : MethylPlus
+NFATC3 _ DBD : MethylPlus
+NFATC4 _ DBD : MethylPlus
+NFKB2 _ DBD : No CpG
+RUNX2 _ DBD : MethylMinus
+RUNX3 _ FL : MethylMinus
+GMEB1 _ FL : MethylMinus *C*
+GMEB2 _ DBD : MethylMinus *C*
+SKOR1 _ DBD : No CpG
+Index
+SKOR2 _ DBD : No CpG
+EOMES _ DBD : No CpG
+T _ DBD : No CpG
+TBX1 _ DBD : No CpG *W*
+TBX15 _ DBD : No CpG *U*
+TBX18 _ DBD : No CpG *U*
+TBX19 _ DBD : No CpG
+TBX2 _ DBD : No CpG *WB*
+TBX20 _ DBD : MethylPlus *U*
+TBX20 _ FL : MethylPlus
+TBX21 _ DBD : No CpG
+Index
+TBX3 _ DBD : No CpG
+TBX6 _ DBD : No CpG *A*
+TEAD1 _ FL : No CpG *B*
+TEAD2 _ FL : No CpG *B*
+BCL6 _ DBD : Motif dependent *M*
+BCL6B _ DBD : Motif dependent *M*
+HIC1 _ DBD : No CpG
+ZBTB12 _ DBD : Motif dependent *M*
+ZBTB14 _ DBD : MethylMinus
+ZBTB14 _ FL : MethylMinus *W*
+ZBTB18 _ DBD : No CpG
+ZBTB2 _ DBD : MethylMinus
+ZBTB20 _ DBD : MethylPlus *C*
+ZBTB22 _ DBD : No CpG
+ZBTB32 _ DBD : No CpG
+ZBTB33 _ DBD : MethylPlus
+ZBTB37 _ DBD : MethylPlus
+ZBTB43 _ DBD : No CpG *B*
+ZBTB45 _ DBD : No CpG
+ZBTB7A _ DBD : MethylMinus *C*
+ZBTB7B _ DBD : MethylMinus *C*
+ZFP1 _ DBD : No CpG *U*
+ZNF12 _ DBD : MethylPlus
+ZNF140 _ DBD : Little effect
+ZNF177 _ DBD : inconclusive
+ZNF23 _ DBD : MethylPlus *S*
+ZNF250 _ DBD : No CpG
+ZNF274 _ DBD : MethylPlus *S*
+ZNF282 _ DBD : No CpG *UW*
+ZNF343 _ DBD : Multiple effects
+ZNF454 _ DBD : Little effect
+ZNF460 _ DBD : MethylMinus
+ZNF597 _ FL : inconclusive
+ZNF684 _ FL : MethylPlus *S*
+ZNF713 _ DBD : MethylPlus
+ZNF75A _ DBD : No CpG
+ZNF75A _ FL : No CpG *A*
+ZNF174 _ DBD : MethylPlus
+ZNF263 _ DBD : No CpG
+ZNF323 _ FL : MethylPlus
+ZNF396 _ FL : MethylMinus
+ZNF444 _ FL : MethylPlus *S*
+ZNF449 _ DBD : Motif dependent *M*
+ZSCAN1 _ DBD : Inconclusive
+ZSCAN16 _ DBD : No CpG
+ZSCAN16 _ FL : No CpG
+Index
+ZSCAN23 _ DBD : No CpG
+ZSCAN29 _ DBD : Multiple effects *WC*
+ZSCAN4 _ DBD : Inconclusive
+ZSCAN5 _ DBD : No CpG
+Index
+ZSCAN9 _ DBD : No CpG
+BCL11B _ DBD : Little effect *W*
+EGR1 _ DBD : Little effect
+EGR2 _ FL : Little effect
+EGR3 _ FL : Little effect
+EGR4 _ DBD : MethylPlus *C*
+GFI1 _ DBD : MethylMinus *S*
+GFI1B _ DBD : No CpG *S*
+GLI2 _ DBD : Multiple effects *S*
+GLI3 _ DBD : Multiple effects *S*
+GLIS1 _ DBD : MethylMinus *S*
+GLIS2 _ DBD : MethylMinus
+KLF10 _ DBD : MethylPlus
+KLF11 _ DBD : MethylPlus *C*
+KLF12 _ FL : MethylPlus *C*
+KLF13 _ DBD : MethylPlus *C*
+KLF13 _ FL : MethylPlus *C*
+KLF14 _ DBD : MethylPlus *C*
+KLF15 _ DBD : MethylPlus
+KLF15 _ FL : MethylPlus
+KLF16 _ DBD : MethylPlus *C*
+KLF17 _ DBD : Motif dependent *M*
+KLF2 _ DBD : Little effect *N*
+KLF3 _ FL : Motif dependent *M*
+KLF4 _ DBD : Little effect
+KLF5 _ DBD : Little effect *N*
+KLF6 _ DBD : MethylPlus *C*
+MTF1 _ DBD : Little effect
+OSR1 _ DBD : Little effect *S*
+OSR2 _ DBD : Inconclusive
+OVOL1 _ FL : MethylMinus *C*
+OVOL2 _ DBD : MethylMinus *C*
+OVOL2 _ FL : MethylMinus *C*
+SCRT1 _ DBD : MethylPlus *C*
+SCRT2 _ DBD : MethylPlus
+SNAI1 _ DBD : MethylPlus
+SNAI1 _ FL : MethylPlus
+SNAI2 _ DBD : MethylPlus
+SNAI2 _ FL : MethylPlus
+SNAI3 _ FL : MethylPlus
+SP1 _ DBD : MethylPlus *C*
+SP2 _ DBD : MethylPlus *C*
+SP3 _ DBD : Little effect
+SP8 _ DBD : Little effect
+SP9 _ DBD : Little effect
+YY1 _ FL : Motif dependent *M*
+YY2 _ FL : Multiple effects
+ZBTB26 _ FL : No CpG *N*
+ZFP41 _ FL : inconclusive
+ZFP42 _ DBD : Multiple effects
+ZIC1 _ DBD : inconclusive
+ZIC1 _ FL : inconclusive
+ZIC3 _ DBD : inconclusive
+ZIC3 _ FL : inconclusive
+ZIC4 _ DBD : inconclusive
+ZIC5 _ DBD : inconclusive
+ZNF276 _ DBD : No CpG
+ZNF281 _ DBD : No CpG *U*
+ZNF296 _ DBD : No CpG *W*
+ZNF32 _ FL : MethylPlus *S*
+ZNF345 _ DBD : Multiple effects
+ZNF384 _ DBD : No CpG
+Index
+ZNF410 _ DBD : No CpG
+ZNF501 _ FL : MethylMinus *W*
+ZNF524 _ FL : MethylPlus *C*
+ZNF580 _ DBD : No CpG *UW*
+ZNF580 _ FL : No CpG
+Index
+ZNF660 _ FL : No CpG
+ZNF704 _ FL : MethylMinus
+ZNF740 _ DBD : MethylPlus *S*
+ZNF740 _ FL : MethylPlus *S*
+ZNF76 _ DBD : inconclusive
+ZNF771 _ DBD : MethylPlus *C*
+ZNF771 _ FL : MethylPlus *C*
+ZNF784 _ FL : MethylPlus *C*
+ZNF787 _ FL : No CpG *S*
+ZNF821 _ FL : MethylPlus *S*
+CPSF4 _ FL : No CpG
+Index
+DPF1 _ DBD : No CpG
+LIN28B _ FL : MethylMinus *S*
+MBNL2 _ FL : MethylMinus
+PRDM1 _ DBD : No CpG
+PRDM4 _ DBD : MethylPlus
+XPA _ FL : No CpG *W*
+ZBED1 _ DBD : MethylMinus
+ZNF385D _ DBD : Little effect *W*
