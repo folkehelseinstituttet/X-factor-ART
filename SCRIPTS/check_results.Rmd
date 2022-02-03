@@ -1,0 +1,1054 @@
+---
+title: "Checking Xchrom EWAS results"
+author: "Julia Romanowska"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, dpi = 150, cache = TRUE)
+
+library(tidyverse)
+library(skimr)
+library(UpSetR)
+library(biomaRt)
+library(scico)
+library(patchwork)
+library(gt)
+library(here)
+library(ggrepel)
+
+source(here("SCRIPTS", "gg_qqplot.R"))
+source(here("SCRIPTS", "grabRegulRegions.R"))
+source(here("SCRIPTS", "grabGenes.R"))
+
+# used internal naming of the models, but for publication, we need to
+#  translate it to model 1, 2, 3, 4
+all_model_names <- c("1c", "parents.1c", "1d.bw", "parents.1d.bw")
+
+signif_pval_thresh <- 0.05
+chr <- "X"
+```
+
+# INTRO
+
+
+## Read data
+
+```{r load_data}
+# EWAS results
+ewas_results_list <- readRDS(here("DATA", "XchromosomeResultsSexStratified.rds"))
+class(ewas_results_list)
+names(ewas_results_list)
+ewas_results_list$Boys.1c
+
+# CpG data
+cpg_info <- readRDS(here("DATA", "CpG_info_Xchrom_manifest.rds"))
+```
+
+## P-values
+
+Here, the significance is defined as FDR-corrected pvalue <
+`r signif_pval_thresh` and we consider only analyses of boys and girls separately.
+
+```{r}
+ewas_results_tbl <- bind_rows(
+  map(names(ewas_results_list), function(name){
+    cur_res <- ewas_results_list[[name]]
+    return(
+      cur_res %>%
+        tibble::add_column(group = name)
+    )
+  })
+)
+
+# add 'model' column with the name of the model as stated in manuscript!
+ewas_results_tbl <- ewas_results_tbl %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls|Both].1c"),
+    yes = "Model 1",
+    no = NA
+  )) %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls|Both].parents.1c"),
+    yes = "Model 2",
+    no = model
+  )) %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls|Both].1d.bw"),
+    yes = "Model 3",
+    no = model
+  )) %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls|Both].parents.1d.bw"),
+    yes = "Model 4",
+    no = model
+  )) %>%
+  mutate(group = word(group, 1, 1, sep = "\\."))
+ewas_results_tbl
+```
+
+### after BACON adjustment
+
+```{r qqplot_after_bacon}
+all_pvals <- ewas_results_tbl$ps
+names(all_pvals) <- paste0(ewas_results_tbl$group, ewas_results_tbl$model)
+pvals_qqplot <- create_df_qq(all_pvals) %>%
+  dplyr::select(-group) %>%
+  bind_cols(
+    ewas_results_tbl %>%
+      arrange(group, model, ps) %>%
+      dplyr::select(group, model, cpg_id)
+  )
+
+log10Pe <- expression(paste("Expected -log"[10], plain(P)))
+log10Po <- expression(paste("Observed -log"[10], plain(P)))
+max.lims <- range(c(pvals_qqplot$observed, pvals_qqplot$expected)) + 0.5
+
+(qqplots_both_all_models_afterbacon <- ggplot(pvals_qqplot) +
+  geom_point(aes(expected, observed, color = model)) +
+  scale_color_scico_d(palette = "berlin", name = "") +
+  facet_wrap(facets = vars(group)) +
+  geom_abline(intercept = 0, slope = 1, alpha = 0.5) +
+  geom_line(aes(expected, cupper), linetype = 2) +
+  geom_line(aes(expected, clower), linetype = 2) +
+  # showing labels only for the two most signif.CpGs - these are the
+    #  same across models for girls-only and boys-only groups
+  geom_label_repel(
+    aes(expected, observed, label = cpg_id),
+    color = "grey30",
+    data = pvals_qqplot %>%
+      filter(model == "Model 1") %>%
+      group_by(group, model) %>%
+      slice(1:2),
+    xlim = c(5, NA),
+    force = 100#,
+    # max.iter = 100000
+  ) +
+  xlab(log10Pe) +
+  ylab(log10Po) +
+  ylim(0, round(max.lims[2])) +
+  xlim(0, round(max.lims[2])) +
+  coord_fixed(clip = FALSE) +
+  theme(legend.position = "bottom"))
+```
+
+```{r qqplot_after_bacon_only_models_1_2}
+(qqplots_both_models1_2_afterbacon <- ggplot(
+  pvals_qqplot %>% filter(model %in% c("Model 1", "Model 2"))
+  ) +
+  geom_point(aes(expected, observed, color = model)) +
+  facet_grid(cols = vars(group)) +
+  geom_abline(intercept = 0, slope = 1, alpha = 0.5) +
+  geom_line(aes(expected, cupper), linetype = 2) +
+  geom_line(aes(expected, clower), linetype = 2) +
+  scale_color_scico_d(palette = "berlin", name = "") +
+  # showing labels only for the two most signif.CpGs - these are the
+    #  same across models for girls-only and boys-only groups
+  geom_label_repel(
+    aes(expected, observed, label = cpg_id),
+    color = "grey30",
+    data = pvals_qqplot %>%
+      filter(model == "Model 1") %>%
+      group_by(group, model) %>%
+      slice(1:2),
+    xlim = c(5, NA),
+    force = 100#,
+    # max.iter = 100000
+  ) +
+  xlab(log10Pe) +
+  ylab(log10Po) +
+  ylim(0, round(max.lims[2])) +
+  xlim(0, round(max.lims[2])) +
+  coord_fixed(clip = FALSE) +
+  theme(legend.position = "bottom"))
+```
+
+### before BACON adjustment
+
+```{r qqplot_before_bacon}
+all_pvals_b4 <- ewas_results_tbl$old_ps
+names(all_pvals_b4) <- paste0(ewas_results_tbl$group, ewas_results_tbl$model)
+pvals_qqplot_b4 <- create_df_qq(all_pvals_b4) %>%
+  dplyr::select(-group) %>%
+  bind_cols(
+    ewas_results_tbl %>%
+      arrange(group, model, ps) %>%
+      dplyr::select(group, model, cpg_id)
+  )
+
+max.lims_b4 <- range(c(pvals_qqplot_b4$observed, pvals_qqplot_b4$expected)) + 0.5
+
+(qqplots_both_all_models_beforebacon <- ggplot(pvals_qqplot_b4) +
+  geom_point(aes(expected, observed, color = model)) +
+  facet_wrap(facets = vars(group)) +
+  geom_abline(intercept = 0, slope = 1, alpha = 0.5) +
+  geom_line(aes(expected, cupper), linetype = 2) +
+  geom_line(aes(expected, clower), linetype = 2) +
+  scale_color_scico_d(palette = "berlin", name = "") +
+  # showing labels only for the two most signif.CpGs - these are the
+    #  same across models for girls-only and boys-only groups
+  geom_label_repel(
+    aes(expected, observed, label = cpg_id),
+    color = "grey30",
+    data = pvals_qqplot_b4 %>%
+      filter(model == "Model 1") %>%
+      group_by(group, model) %>%
+      slice(1:2),
+    xlim = c(5, NA),
+    force = 100#,
+    # max.iter = 100000
+  ) +
+  xlab(log10Pe) +
+  ylab(log10Po) +
+  ylim(0, round(max.lims_b4[2])) +
+  xlim(0, round(max.lims_b4[2])) +
+  coord_fixed(clip = FALSE) +
+  theme(legend.position = "bottom"))
+```
+
+```{r qqplot_before_bacon_only_models_1_2}
+(qqplots_both_models1_2_beforebacon <- ggplot(
+  pvals_qqplot_b4 %>% filter(model %in% c("Model 1", "Model 2"))
+  ) +
+  geom_point(aes(expected, observed, color = model)) +
+  facet_grid(cols = vars(group)) +
+  geom_abline(intercept = 0, slope = 1, alpha = 0.5) +
+  geom_line(aes(expected, cupper), linetype = 2) +
+  geom_line(aes(expected, clower), linetype = 2) +
+  scale_color_scico_d(palette = "berlin", name = "") +
+  # showing labels only for the two most signif.CpGs - these are the
+    #  same across models for girls-only and boys-only groups
+  geom_label_repel(
+    aes(expected, observed, label = cpg_id),
+    color = "grey30",
+    data = pvals_qqplot_b4 %>%
+      filter(model == "Model 1") %>%
+      group_by(group, model) %>%
+      slice(1:2),
+    xlim = c(5, NA),
+    force = 100#,
+    # max.iter = 100000
+  ) +
+  xlab(log10Pe) +
+  ylab(log10Po) +
+  ylim(0, round(max.lims_b4[2])) +
+  xlim(0, round(max.lims_b4[2])) +
+  coord_fixed(clip = FALSE) +
+  theme(legend.position = "bottom"))
+```
+
+```{r qqplots_before-after_compare, results='none', fig.show='hide', fig.keep='none'}
+# all models
+((qqplots_both_all_models_beforebacon +
+    labs(title = "A) p-values before applying BACON"))
+  / (qqplots_both_all_models_afterbacon +
+      labs(title = "B) p-values after applying BACON"))
+ ) +
+  plot_layout(guides = "collect") &
+  theme(legend.position = "bottom")
+
+ggsave(here("FIGURES", "qqplots_before-after_BACON_all_models.png"),
+       width = 6, height = 7)
+
+# models 1-2
+((qqplots_both_models1_2_beforebacon +
+    labs(title = "A) p-values before applying BACON"))
+  / (qqplots_both_models1_2_afterbacon +
+      labs(title = "B) p-values after applying BACON"))
+ ) +
+  plot_layout(guides = "collect") &
+  theme(legend.position = "bottom")
+
+ggsave(here("FIGURES", "qqplots_before-after_BACON_models1-2.png"),
+       width = 6, height = 7)
+```
+
+## Volcano plots
+
+Checking the overall distibution of effect sizes for boys-only and girls-only
+analyses.
+
+```{r volcano_plots, out.width="100%"}
+ewas_results_tbl <- ewas_results_tbl %>%
+  mutate(
+    ps_adj_BH = stats::p.adjust(ps, method = "BH"),
+    old_signif = (old_ps_adj_BH < signif_pval_thresh),
+    signif = (ps_adj_BH < signif_pval_thresh)
+  )
+
+ggplot(ewas_results_tbl, aes(effect_size, -log10(old_ps))) +
+  geom_point(aes(col = old_signif)) +
+  scale_color_manual(
+    "Significant?",
+    values = c("black", "orange"),
+    labels = c("NO", "YES")
+  ) +
+  facet_grid(rows = vars(group), cols = vars(model)) +
+  xlab("effect size") +
+  ylab("-log10( raw p-value )") +
+  theme_bw() +
+  labs(
+    title = "Effect size vs unadjusted p-value for all CpGs on X-chrom",
+    subtitle = "(before use of BACON)",
+  ) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(face = "bold.italic")
+  )
+#ggsave(here("FIGURES", "volcano_plot_before_BACON.png"))
+
+ggplot(ewas_results_tbl, aes(effect_size, -log10(ps))) +
+  geom_point(aes(col = signif)) +
+  scale_color_manual(
+    "Significant?",
+    values = c("black", "orange"),
+    labels = c("NO", "YES")
+  ) +
+  facet_grid(rows = vars(group), cols = vars(model)) +
+  xlab("effect size") +
+  ylab("-log10( raw p-value )") +
+  theme_bw() +
+  labs(
+    title = "Effect size vs unadjusted p-value for all CpGs on X-chrom",
+    subtitle = "(after use of BACON)"
+  ) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(face = "bold.italic")
+  )
+#ggsave(here("FIGURES", "volcano_plot_after_BACON.png"))
+
+median_effect_size <- ewas_results_tbl %>%
+  group_by(group, model) %>%
+  summarise(
+    med_eff_size = median(effect_size),
+    sd_eff_size = sd(effect_size),
+    min_eff_size = min(effect_size),
+    max_eff_size = max(effect_size)
+  )
+
+ggplot(ewas_results_tbl, aes(effect_size)) +
+  geom_density(aes(fill = group), alpha = 0.4) +
+  facet_wrap(facets = vars(model)) +
+  geom_vline(
+    data = median_effect_size,
+    aes(xintercept = med_eff_size, col = group)
+  ) +
+  scale_fill_manual(values = c("cyan", "orange")) +
+  scale_color_manual(values = c("green", "red")) +
+  theme_bw() +
+  xlab("effect size") +
+  labs(title = "Density of effect size estimates")
+
+ggsave(here("FIGURES", "density_effect_size_compare.png"))
+```
+
+```{r volcano_plots_together, fig.show='hide', fig.keep='none'}
+volcano_pl_b4b <- ggplot(ewas_results_tbl, aes(effect_size, -log10(old_ps))) +
+  geom_point(aes(col = old_signif), size = 0.8) +
+  scale_color_manual(
+    "Significant?",
+    values = c("black", "orange"),
+    labels = c("NO", "YES")
+  ) +
+  facet_grid(rows = vars(group), cols = vars(model)) +
+  xlab("effect size") +
+  ylab("-log10( raw p-value )") +
+  theme_bw() +
+  labs(
+    # title = "Effect size vs unadjusted p-value for all CpGs on X-chrom",
+    title = "A) before BACON adjustment",
+  ) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(face = "bold.italic")
+  )
+
+volcano_pl_a4b <- ggplot(ewas_results_tbl, aes(effect_size, -log10(ps))) +
+  geom_point(aes(col = signif), size = 0.8) +
+  scale_color_manual(
+    "Significant?",
+    values = c("black", "orange"),
+    labels = c("NO", "YES")
+  ) +
+  facet_grid(rows = vars(group), cols = vars(model)) +
+  xlab("effect size") +
+  ylab("-log10( raw p-value )") +
+  theme_bw() +
+  labs(
+    # title = "Effect size vs unadjusted p-value for all CpGs on X-chrom",
+    title = "B) after BACON adjustment"
+  ) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(face = "bold.italic")
+  )
+
+(volcano_pl_b4b / volcano_pl_a4b) + plot_layout(guides = "collect")
+ggsave(
+  here("FIGURES", "volcano_plots_all.png"),
+  width = 8,
+  height = 6
+)
+```
+
+
+## Significant results
+
+```{r, echo=FALSE}
+signif_results_list <- map(ewas_results_list, function(x){
+  signif_res <- x %>%
+    filter(ps_adj_BH < signif_pval_thresh)
+  return(signif_res)
+})
+```
+
+Which are common among the most significant?
+
+```{r common_signif_boys, echo=FALSE}
+signif_results_boys <- map(
+  signif_results_list[
+    str_subset(names(signif_results_list), fixed("Boys."))
+  ],
+  function(x){
+    return(x$cpg_id)
+})
+
+signif_all_models_boys <- Reduce(
+  f = union,
+  signif_results_boys
+)
+
+signif_common_all_models_boys <- Reduce(
+  f = intersect,
+  x = signif_results_boys
+)
+signif_common_1_2_models_boys <- Reduce(
+  f = intersect,
+  x = signif_results_boys[c(1,3)]
+)
+```
+
+For boys, when taking into account all four models, the common most significant
+CpGs are `r cat(signif_common_all_models_boys, sep = ", ")`, while when taking
+into account only models 1 and 2:
+`r cat(signif_common_1_2_models_boys, sep = ", ")`.
+
+```{r common_signif_girls}
+signif_results_girls <- map(
+  signif_results_list[
+    str_subset(names(signif_results_list), fixed("Girls."))
+  ],
+  function(x){
+    return(x$cpg_id)
+})
+
+signif_all_models_girls <- Reduce(
+  f = union,
+  signif_results_girls
+)
+
+signif_common_all_models_girls <- Reduce(
+  f = intersect,
+  x = signif_results_girls
+)
+signif_common_1_2_models_girls <- Reduce(
+  f = intersect,
+  x = signif_results_girls[c(1,3)]
+)
+```
+
+For girls, when taking into account all four models, the common most significant
+CpGs are `r cat(signif_common_all_models_girls, sep = ", ")`, while when taking
+into account only models 1 and 2:
+`r cat(signif_common_1_2_models_girls, sep = ", ")`.
+
+
+### How many significant?
+
+```{r}
+no_signif_per_model <- map_int(signif_results_list, nrow)
+knitr::kable(
+  as_tibble(no_signif_per_model, rownames = "model"),
+  col.names = c("model", "# signif. CpGs")
+)
+
+upsetr_signif_list <- map(signif_results_list, function(x){
+  cur_res <- as.factor(x$cpg_id)
+  return(cur_res)
+})
+# this re-ordering is just for producing nice figure
+names(upsetr_signif_list) <- c(
+  paste0("Boys_model", c(1, 3, 2, 4)),
+  paste0("Girls_model", c(1, 3, 2, 4))
+)
+upsetr_signif_list <- upsetr_signif_list[
+  c(paste0("Boys_model", 1:4),
+  paste0("Girls_model", 1:4))
+]
+png(filename = here("FIGURES", "upset_all_models_number_signif_cpg.png"),
+    width = 9, height = 6, units = "in", res = 100)
+upset(
+  fromList(upsetr_signif_list),
+  order.by = "freq",
+  nsets = length(upsetr_signif_list),
+  text.scale = 1.5
+)
+dev.off()
+```
+
+
+## Fetching annotations
+
+```{r fetch_regulatory_regions}
+regul_regs_file <- here("DATA", "regulatory_regions.rds")
+
+if(!file.exists(regul_regs_file)){
+  ensembl_reg <- useEnsembl("regulation",
+    dataset = "hsapiens_regulatory_feature",
+    GRCh = 37)
+  
+  my_attribs <- c(
+    "regulatory_stable_id",
+    "chromosome_name",
+    "chromosome_start",
+    "chromosome_end",
+    "feature_type_name",
+    "feature_type_description",
+    "so_accession"
+  )
+  my_filters <- c(
+    "chromosome_name",
+    "start", "end"
+  )
+  
+  regulatory_regs <- map(signif_results_list, function(x){
+    cur_data <- x %>%
+      mutate(
+        end = MAPINFO + 1
+      ) %>%
+      dplyr::select(CHR, MAPINFO, end)
+    colnames(cur_data) <- my_filters
+    out <- grabRegulRegions(
+      cur_data, ensembl_reg, my_attribs, my_filters, asGRanges = TRUE
+    )
+  })
+  saveRDS(regulatory_regs, file = regul_regs_file)
+} else {
+  regulatory_regs <- readRDS(regul_regs_file)
+}
+```
+
+
+```{r fetch_genes}
+genes_regs_file <- here("DATA", "genes_regions.rds")
+
+if(!file.exists(genes_regs_file)){
+  ensembl_genes <- useEnsembl("genes",
+    dataset = "hsapiens_gene_ensembl",
+    GRCh = 37)
+  
+  my_attribs <- c(
+    "ensembl_gene_id",
+    "description",
+    "external_gene_name",
+    "start_position", "end_position"
+  )
+  my_filters <- c(
+    "chromosome_name",
+    "start", "end"
+  )
+  
+  genes_regs <- map(signif_results_list, function(x){
+    cur_data <- x %>%
+      mutate(
+        end = MAPINFO + 1
+      ) %>%
+      dplyr::select(CHR, MAPINFO, end)
+    colnames(cur_data) <- my_filters
+    out <- grabRegulRegions(
+      positions = cur_data,
+      mart = ensembl_genes,
+      attribs = my_attribs,
+      filters = my_filters,
+      asGRanges = TRUE
+    )
+    return(out)
+  })
+  saveRDS(genes_regs, file = genes_regs_file)
+} else {
+  genes_regs <- readRDS(genes_regs_file)
+}
+```
+
+### Plot these annotations
+
+```{r}
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+all.genes <- karyoploteR::makeGenesDataFromTxDb(
+  txdb, plot.transcripts = FALSE, plot.transcripts.structure = FALSE)$genes
+all.genes.tbl <- as_tibble(as.data.frame(all.genes))
+
+walk(names(ewas_results_list), function(x){
+  cur_data_all <- ewas_results_list[[x]]
+  cur_data_signif <- signif_results_list[[x]]
+  cur_genes_regs <- genes_regs[[x]]
+  cur_reg_regs <- regulatory_regs[[x]]
+  cur_y_lim <- range(-log10(cur_data_all$ps_adj_BH))
+  
+  png(filename = here("FIGURES", paste0("signif_cpg_annot_model-", x, ".png")),
+      width = 800, height = 480, pointsize = 16)
+  kp <- karyoploteR::plotKaryotype(
+    chromosomes = paste0("chr", chr),
+    plot.type = 2
+  )
+  # plotting gene density
+  karyoploteR::kpPlotDensity(
+    kp, all.genes,
+    data.panel = 1, r0 = 0, r1 = 0.4
+  )
+  karyoploteR::kpAddLabels(
+    kp, labels = "gene density",
+    data.panel = 1, r0 = 0, r1 = 0.3,
+    label.margin = -0.02
+  )
+  # plotting CpG p-values
+  karyoploteR::kpPoints(
+    kp,
+    x = cur_data_signif$MAPINFO,
+    y = -log10(cur_data_signif$ps_adj_BH),
+    chr = paste0("chr", chr),
+    data.panel = 1, cex = 1.5,
+    col = "cyan",
+    r0 = 0.5, r1 = 1,
+    ymin = 0,
+    ymax = cur_y_lim[2]
+  )
+  karyoploteR::kpPoints(
+    kp,
+    x = cur_data_all$MAPINFO,
+    y = -log10(cur_data_all$ps_adj_BH),
+    chr = paste0("chr", chr),
+    data.panel = 1,
+    r0 = 0.5, r1 = 1,
+    ymin = 0,
+    ymax = cur_y_lim[2]
+  )
+  karyoploteR::kpAxis(
+    kp, data.panel = 1,
+    r0 = 0.5, r1 = 1,
+    ymin = 0,
+    ymax = cur_y_lim[2]
+  )
+  karyoploteR::kpAddLabels(
+    kp, labels = "-log10(FDR)",
+    srt = 90, data.panel = 1,
+    r0 = 1, r1 = 0.9,
+    label.margin = 0.07
+  )
+
+  if(length(cur_reg_regs) != 0){
+    # plotting regulatory regs
+    karyoploteR::kpDataBackground(
+      kp, data.panel = 2,
+      r0 = 0.55, r1 = 0.8,
+      color = "#D3E1FF"
+    )
+    karyoploteR::kpPlotRegions(
+      kp, data = cur_reg_regs,
+      data.panel = 2, r0 = 0.55, r1 = 0.8,
+      col = "navyblue",
+      border = "navyblue"
+    )
+    karyoploteR::kpPlotMarkers(
+      kp, data = cur_reg_regs,
+      labels = cur_reg_regs$feature_type_name,
+      data.panel = 2, r0 = 0, r1 = 1,
+      text.orientation = "horizontal",
+      label.dist = 0.01,
+      label.margin = 5,
+      label.color = "navyblue",
+      line.color = "navyblue",
+      ignore.chromosome.ends = TRUE
+    )
+    karyoploteR::kpAddLabels(
+      kp, labels = "regulatory\n regions",
+      data.panel = 2, r0 = 0.6, r1 = 1,
+      col = "navyblue"
+    )
+  }
+  # plotting genes
+  karyoploteR::kpPlotRegions(
+    kp, data = cur_genes_regs,
+    data.panel = 2, r0 = 0, r1 = 0.2
+  )
+  karyoploteR::kpPlotMarkers(
+    kp, data = cur_genes_regs,
+    labels = cur_genes_regs$external_gene_name,
+    data.panel = 2, r0 = 0, r1 = 0.4,
+    text.orientation = "horizontal",
+    label.dist = 0.01,
+    label.margin = 5,
+    ignore.chromosome.ends = TRUE
+  )
+  karyoploteR::kpAddLabels(
+    kp, labels = "genes",
+    data.panel = 2, r0 = 0.2, r1 = 0.45
+  )
+  # title
+  title(main = paste0(
+    stringr::word(x, 1, 1, sep = stringr::fixed(".")),
+    ", model ",
+    match(
+      stringr::word(x, 2, -1, sep = stringr::fixed(".")), all_model_names
+    )
+  ))
+  dev.off()
+})
+
+```
+
+### How many overlap?
+
+```{r, fig.cap="Overlap between the models in terms of which genes are covered by the significant CpGs"}
+upsetr_genes_list <- map(genes_regs, function(cur_genes){
+  return(as.factor(cur_genes$external_gene_name))
+})
+upset(fromList(upsetr_genes_list), nsets = length(upsetr_genes_list),
+      order.by = "freq")
+```
+
+```{r, fig.cap="Overlap between the models in terms of which regulatory regions are covered by the significant CpGs"}
+upsetr_regul_list <- map(regulatory_regs, function(cur_regul){
+  return(as.factor(cur_regul$regulatory_stable_id))
+})
+upset(fromList(upsetr_regul_list), nsets = length(upsetr_regul_list),
+      order.by = "freq")
+```
+
+### Nice tables
+
+Summing up the results
+
+```{r, eval = FALSE}
+# tidy data
+signif_results_gen_location <- map(
+  names(signif_results_list),
+  function(name){
+    cur_data <- signif_results_list[[name]]
+    cur_regul_regs <- as_tibble(regulatory_regs[[name]])
+    cur_genes_regs <- as_tibble(genes_regs[[name]])
+
+    # adding the information on regulatory regions, if any
+    empty_tbl <- tibble(region_ID = NA,
+            region_type = NA,
+            region_position = NA)
+    out <- bind_cols(
+      cur_data,
+      empty_tbl
+    )
+    if(nrow(cur_regul_regs) != 0){
+      cur_regul_regs <- cur_regul_regs %>%
+        distinct()
+      out <- map(seq_len(nrow(cur_data)), function(row){
+        cur_row <- cur_data[row,]
+        tmp_regul_regs <- cur_regul_regs %>%
+          filter(
+              cur_row$MAPINFO <= end &
+              cur_row$MAPINFO >= start
+            ) %>%
+          mutate(region_position = paste0(
+            "chrX:", format(start, big.mark = ","),
+            "-", format(end, big.mark = ","))) %>%
+          dplyr::select(
+            region_ID = regulatory_stable_id,
+            region_type = feature_type_name,
+            region_position
+          )
+          
+        if(nrow(tmp_regul_regs) == 0){
+          tmp_regul_regs <- empty_tbl
+        }
+        return(bind_cols(cur_row, tmp_regul_regs))
+      }) %>%
+        bind_rows()
+    }
+    # adding the information on genes regions, if any
+    if(nrow(cur_genes_regs) != 0){
+      cur_genes_regs <- cur_genes_regs %>%
+        distinct()
+      out <- map(seq_len(nrow(out)), function(row){
+        cur_row <- out[row,]
+        tmp_genes_regs <- cur_genes_regs %>%
+          filter(
+              cur_row$MAPINFO <= end &
+              cur_row$MAPINFO >= start
+            ) %>%
+          mutate(gene_position = paste0(
+            "chrX:", format(start, big.mark = ","),
+            "-", format(end, big.mark = ","))) %>%
+          dplyr::select(
+            gene_ID = ensembl_gene_id,
+            gene_descr = description,
+            gene_name = external_gene_name,
+            gene_position
+          )
+          
+        if(nrow(tmp_genes_regs) == 0){
+          tmp_genes_regs <- tibble(
+            gene_ID = NA,
+            gene_descr = NA,
+            gene_name = NA,
+            gene_position = NA
+          )
+        }
+        return(bind_cols(cur_row, tmp_genes_regs))
+      }) %>%
+        bind_rows()
+    }
+    out <- out %>%
+      tibble::add_column(group = name)
+    return(out)
+  }) %>%
+  bind_rows() %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls].1c"),
+    yes = "Model 1",
+    no = NA
+  )) %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls].parents.1c"),
+    yes = "Model 2",
+    no = model
+  )) %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls].1d.bw"),
+    yes = "Model 3",
+    no = model
+  )) %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls].parents.1d.bw"),
+    yes = "Model 4",
+    no = model
+  )) %>%
+  mutate(group = stringr::word(group, 1, 1, sep = stringr::fixed("."))) %>%
+  arrange(group, model, MAPINFO) %>%
+  group_by(group, model)
+
+# using gt package to make it nice
+signif_results_gen_location_gt <- gt(
+    signif_results_gen_location %>%
+      dplyr::select(!c(old_ps, old_ps_adj_BH, CHR, std_err, ps))
+  ) %>%
+  tab_header(
+    title = md("**Most significant findings (FDR < 0.05)**"),
+    subtitle = md("_(grouped by sex and model)_")
+  ) %>%
+  tab_spanner(
+    label = md("**CpG info**"),
+    columns = c(cpg_id, MAPINFO)
+  ) %>%
+  tab_spanner(
+    label = md("**EWAS results**"),
+    columns = c(effect_size, ps_adj_BH)
+  ) %>%
+  tab_spanner(
+    label = md("**Regulatory regions**"),
+    id = "reg_regions",
+    columns = c(region_ID, region_type, region_position)
+  ) %>%
+  tab_spanner(
+    label = md("**Genes**"),
+    id = "genes",
+    columns = c(gene_ID, gene_descr, gene_name, gene_position)
+  ) %>%
+  cols_label(
+    cpg_id = "CpG ID",
+    MAPINFO = "Position (chrX)",
+    effect_size = "Effect size",
+    ps_adj_BH = "FDR",
+    region_ID = "Ensembl ID",
+    region_type = "Region type",
+    region_position = "Position",
+    gene_ID = "Ensembl ID",
+    gene_descr = "Description",
+    gene_name = "Gene ID",
+    gene_position = "Position"
+  ) %>%
+  tab_options(
+    row_group.background.color = "#E6C2AA",
+    row_group.font.weight = "bold",
+    column_labels.background.color = "#F6DA91"
+  ) %>%
+  fmt_scientific(
+    columns = c(ps_adj_BH)
+  ) %>%
+  fmt_number(
+    columns = c(effect_size),
+    decimals = 2
+  ) %>%
+  fmt_number(
+    columns = MAPINFO,
+    use_seps = TRUE,
+    decimals = 0
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(style = "italic")
+      ),
+    locations = cells_body(
+      columns = gene_descr,
+      rows = !is.na(gene_descr)
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(weight = "bold")
+      ),
+    locations = cells_body(
+      columns = cpg_id
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(align = "center")
+      ),
+    locations = cells_row_groups()
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(align = "center")
+      ),
+    locations = cells_body(
+      rows = is.na(everything())
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_borders(
+        sides = "right"
+      )
+    ),
+    locations = cells_body(
+      columns = c(ps_adj_BH, region_position)
+    )
+  ) %>%
+  data_color(
+    columns = effect_size,
+    colors = scales::col_numeric(
+      palette = scico(5, palette = 'roma'),
+      domain = range(signif_results_gen_location$effect_size)
+    )
+  ) %>%
+  tab_footnote(
+    footnote = "Color shading reflects the magnitude and the sign of the estimated effect - from dark red (strong negative effect), through beige (weak negative effect), and dark blue (strong positive effect).",
+    locations = cells_column_labels(
+      columns = effect_size
+    )
+  ) %>%
+  tab_footnote(
+    footnote = "NA = Not applicable",
+    locations = cells_column_spanners(
+      spanners = c("reg_regions", "genes")
+    )
+  ) %>%
+  tab_footnote(
+    footnote = "genome build GRCh 37",
+    locations = cells_column_labels(
+      columns = c("gene_position", "MAPINFO", "region_position")
+    )
+  )
+# signif_results_gen_location_gt
+```
+
+
+## Check against gaphunter results
+
+### Girls only
+
+```{r}
+gaphunter_res_girls <- readRDS(
+  here("DATA", "gaphunting_res_girls_TXT.rds")
+)
+names(gaphunter_res_girls)
+```
+
+There were `r nrow(gaphunter_res_girls$proberesults)` possibly multimodal CpGs found.
+
+Were there any gap-CpGs in the results?
+
+```{r}
+gap_cpgs_girls <- rownames(gaphunter_res_girls$sampleresults)
+any(gap_cpgs_girls %in% signif_all_models_girls)
+```
+
+### Boys only
+
+```{r}
+gaphunter_res_boys <- readRDS(
+  here("DATA", "gaphunting_res_boys_TXT.rds")
+)
+```
+
+There were `r nrow(gaphunter_res_boys$proberesults)` possibly multimodal CpGs found.
+
+Were there any gap-CpGs in the results?
+
+```{r}
+gap_cpgs_boys <- rownames(gaphunter_res_boys$sampleresults)
+any(gap_cpgs_boys %in% signif_all_models_boys)
+```
+
+
+## Check against other studies
+
+### Li, S., _et al._ (2020). "Exploratory analysis of age and sex dependent DNA methylation patterns on the X-chromosome in whole blood samples." _Genome Medicine_, 12(1), 1–13. https://doi.org/10.1186/s13073-020-00736-3
+
+Supplementary data from the publication: Table S1 gives grouping of the CpGs
+on X chromosome, by the size of differences between methylation in males and
+females.
+
+- sites under XCI in **red** (group A),
+- sites escaping XCI in **green** (group B),
+- highly methylated in both sexes in **black** (group C),
+- more methylated in males than in females in **purple** (group D),
+- undefined in **grey**
+
+```{r}
+li_suppl_diff_methyl_sexes <- readr::read_csv(
+  here("DATA", "Li_GenomMed2020_Suppl2_TableS1.csv"),
+  skip = 1
+)
+li_suppl_diff_methyl_sexes
+all_signif_cpgs <- bind_rows(
+  map(names(signif_results_list), function(x){
+    cur_data <- signif_results_list[[x]]
+    if(length(cur_data) == 0){
+      return(NULL)
+    }
+    return(cur_data %>%
+             tibble::add_column(group = x))
+  })
+)
+unique_signif_cpgs <- all_signif_cpgs %>%
+  distinct(cpg_id) %>% pull()
+
+signif_cpgs_also_in_li <- li_suppl_diff_methyl_sexes %>%
+  filter(cpg %in% unique_signif_cpgs)
+signif_cpgs_also_in_li %>%
+  arrange(pattern)
+
+signif_cpgs_also_in_li %>%
+  count(color) %>%
+  arrange(n)
+```
+
+Very few CpGs that were significant that also escape XCI. Out of total `r length(unique_signif_cpgs)`
+CpGs that were significant in at least one model (girls or boys, separately),
+`r nrow(signif_cpgs_also_in_li %>% filter(color == "red"))` is within
+the group under XCI control, majority (`r nrow(signif_cpgs_also_in_li %>% filter(color == "grey"))`) was undefined.
+

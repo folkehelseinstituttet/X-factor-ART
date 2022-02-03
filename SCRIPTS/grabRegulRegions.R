@@ -53,10 +53,9 @@ grabRegulRegions <- function(
           mutate(seqnames = "chrX") %>%
           dplyr::select(
             seqnames,
-            start = chromosome_start,
-            end = chromosome_end,
-            type = feature_type_name,
-            reg_ID = regulatory_stable_id
+            contains("start"),
+            contains("end"),
+            everything()
           ) %>%
           distinct()
       )
