@@ -1,0 +1,1253 @@
+---
+title: "Check DMR with the dmrff package"
+author: "Julia Romanowska"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, dpi = 150, cache = TRUE)
+
+library(tidyverse)
+library(skimr)
+library(gghighlight)
+library(ggiraph)
+library(dmrff) # installed from github
+# library(karyoploteR) # <- I'm using their functions, but explicitly since
+                       # there was some crash of these functions with another pkg
+library(sanzo)
+library(here)
+library(biomaRt) # from Bioconductor
+library(UpSetR) # from Bioconductor
+library(TxDb.Hsapiens.UCSC.hg19.knownGene) # from Bioconductor
+
+signif_pval_thresh <- 0.01
+min_cpgs_in_dmr <- 3
+
+source(here("SCRIPTS", "gg_qqplot.R"))
+source(here("SCRIPTS", "grabRegulRegions.R"))
+source(here("SCRIPTS", "grabGenes.R"))
+
+# used internal naming of the models, but for publication, we need to
+#  translate it to model 1, 2, 3, 4
+all_model_names <- c("1c", "parents.1c", "1d.bw", "parents.1d.bw")
+```
+
+# INTRO
+
+# Read data
+
+```{r load_data}
+# # EWAS results
+# ewas_results <- readRDS(here("DATA", "XchromosomeResultsSexStratified.rds"))
+
+# CpG data
+cpg_info <- readRDS(here("DATA", "CpG_info_Xchrom_manifest.rds"))
+
+# DMR data
+dmrff_res_all <- readRDS(here("DATA", "DMRFFResults.rds"))
+class(dmrff_res_all)
+names(dmrff_res_all)
+dmrff_res_all$Boys.1c
+```
+
+# DMRff results
+
+There are very many DMRs found, but some of them are not really DMRs, since
+they contain only one CpG...
+
+```{r}
+dmrff_all_df <- map(
+  names(dmrff_res_all),
+  function(name){
+    return(
+      dmrff_res_all[[name]] %>%
+        tibble::add_column(group = name)
+    )
+  }) %>%
+  bind_rows()
+
+knitr::kable(
+  dmrff_all_df %>%
+    group_by(group) %>%
+    count(n)
+)
+```
+
+I am interested in those that have at least `r min_cpgs_in_dmr` CpGs
+
+```{r}
+knitr::kable(
+  dmrff_all_df %>%
+    filter(n >= min_cpgs_in_dmr) %>%
+    mutate(signif = (p.adjust < signif_pval_thresh)) %>%
+    group_by(group, n) %>%
+    count(signif)
+)
+```
+
+
+## Extract significant DMRs
+
+Significant are when both criteria are fullfilled:
+
+- adjusted p-value < `r signif_pval_thresh`
+- number of CpGs within a DMR >= `r min_cpgs_in_dmr`
+
+```{r}
+dmrff_3more_list <- map(
+  names(dmrff_res_all),
+  function(name){
+    return(
+      as_tibble(dmrff_res_all[[name]]) %>%
+        filter(n >= min_cpgs_in_dmr) %>%
+        tibble::add_column(group = name)
+    )
+})
+names(dmrff_3more_list) <- names(dmrff_res_all)
+
+dmrff_signif_list <- map(
+  names(dmrff_res_all),
+  function(name){
+    return(
+      as_tibble(dmrff_res_all[[name]]) %>%
+        filter(p.adjust < signif_pval_thresh & n >= min_cpgs_in_dmr) %>%
+        tibble::add_column(group = name)
+    )
+})
+names(dmrff_signif_list) <- names(dmrff_res_all)
+dmrff_signif_all <- dmrff_signif_list %>%
+  bind_rows()
+```
+
+### Nice visualization
+
+```{r}
+DT::datatable(
+  dmrff_signif_all %>%
+    dplyr::select(-chr, -z) %>%
+    tidyr::separate(
+      col = group,
+      into = c("gender", "model"),
+      sep = "\\.",
+      extra = "merge"
+    ) %>%
+    mutate(model = match(model, all_model_names)),
+  colnames = c("start", "end", "# CpGs", "estimate", "SE", "p-val", "adj.p-val",
+               "sex", "model no."),
+  caption = paste0("All DMRs with minimum ", min_cpgs_in_dmr, " CpGs and with",
+                   " FDR < ", signif_pval_thresh)
+) %>%
+  DT::formatSignif(
+    columns = 4:7
+  )
+```
+
+## How these differ btwn the models?
+
+```{r, fig.cap="Significant DMRs by model, girls only"}
+girls_dmrff_signif_all <- dmrff_signif_all %>%
+  filter(str_detect(group, "Girls"))
+
+upsetr_dmrs_list_girls <- map(unique(girls_dmrff_signif_all$group), function(cur_group){
+  cur_data <- dmrff_signif_all %>%
+    filter(group == cur_group) %>%
+    mutate(dmrff_name = paste0("chr", chr, ":", start, "-", end))
+  return(as.factor(cur_data$dmrff_name))
+})
+names(upsetr_dmrs_list_girls) <- unique(girls_dmrff_signif_all$group)
+upset(fromList(upsetr_dmrs_list_girls), nsets = length(upsetr_dmrs_list_girls),
+      order.by = "freq")
+
+common_dmrs_girls <- Reduce(intersect, upsetr_dmrs_list_girls)
+common_dmrs_girls
+```
+
+```{r, fig.cap="Significant DMRs by model, boys only"}
+boys_dmrff_signif_all <- dmrff_signif_all %>%
+  filter(str_detect(group, "Boys"))
+
+upsetr_dmrs_list_boys <- map(unique(boys_dmrff_signif_all$group), function(cur_group){
+  cur_data <- boys_dmrff_signif_all %>%
+    filter(group == cur_group) %>%
+    mutate(dmrff_name = paste0("chr", chr, ":", start, "-", end))
+  return(as.factor(cur_data$dmrff_name))
+})
+names(upsetr_dmrs_list_boys) <- unique(boys_dmrff_signif_all$group)
+upset(fromList(upsetr_dmrs_list_boys), nsets = length(upsetr_dmrs_list_boys),
+      order.by = "freq")
+
+common_dmrs_boys <- Reduce(intersect, upsetr_dmrs_list_boys)
+common_dmrs_boys
+```
+
+## Plot significant DMRs
+
+Fetch regulatory region annotation from the ensembl
+
+```{r fetch_regulatory_regions_dmr}
+regul_regs_dmrs_file <- here("DATA", "DMR_regul_regs.rds")
+
+if(!file.exists(regul_regs_dmrs_file)){
+  ensembl_reg <- useEnsembl("regulation",
+    dataset = "hsapiens_regulatory_feature",
+    GRCh = 37)
+  
+  my_attribs <- c(
+    "regulatory_stable_id",
+    "chromosome_name",
+    "chromosome_start",
+    "chromosome_end",
+    "feature_type_name",
+    "feature_type_description",
+    "so_accession"
+  )
+  my_filters <- c(
+    "chromosome_name",
+    "start", "end"
+  )
+  
+  regul_regs_dmrff <- map(dmrff_signif_list, function(cur_dmrff){
+    data_in <- cur_dmrff %>%
+      dplyr::select(chr, start, end)
+    colnames(data_in) <- my_filters
+  
+    cur_regul_regs <- grabRegulRegions(
+      data_in, ensembl_reg, my_attribs, my_filters, asGRanges = TRUE
+    )
+    return(cur_regul_regs)
+  })
+  names(regul_regs_dmrff) <- names(dmrff_signif_list)
+  
+  saveRDS(regul_regs_dmrff, regul_regs_dmrs_file)
+} else {
+  regul_regs_dmrff <- readRDS(regul_regs_dmrs_file)
+}
+sapply(regul_regs_dmrff, length)
+```
+
+Fetch genes
+
+```{r grab_genes_dmr, cache=TRUE, results="hide", fig.keep="none"}
+genes_dmrs_file <- here("DATA", "DMR_genes.rds")
+
+if(!file.exists(genes_dmrs_file)){
+  genes_dmrff <- map(dmrff_signif_list, function(cur_dmrff){
+    data_in <- cur_dmrff %>%
+      dplyr::select(chr, start, end)
+    colnames(data_in) <- c("chromosome_name", "start", "end")
+  
+    cur_genes <- grabGenes(
+      data_in, chromosome = "chrX", asGRanges = TRUE
+    )
+    return(cur_genes)
+  })
+  names(genes_dmrff) <- names(dmrff_signif_list)
+
+  saveRDS(genes_dmrff, genes_dmrs_file)
+} else {
+  genes_dmrff <- readRDS(genes_dmrs_file)
+}
+sapply(genes_dmrff, length)
+
+# grab also ensembl information
+if(!file.exists(here("DATA", "DMR_genes_ensembl.rds"))){
+  ensembl_genes <- useEnsembl("genes",
+    dataset = "hsapiens_gene_ensembl",
+    GRCh = 37)
+  
+  all_attribs <- listAttributes(ensembl_genes)
+  my_attribs <- c(
+    "ensembl_gene_id",
+    "description",
+    "external_gene_name",
+    "start_position", "end_position"
+  )
+  all_filters <- listFilters(ensembl_genes)
+  my_filters <- c(
+    "chromosome_name",
+    "start", "end"
+  )
+  
+  genes_dmr_ensembl <- map(dmrff_signif_list, function(cur_dmrff){
+    data_in <- cur_dmrff %>%
+      dplyr::select(chr, start, end)
+    colnames(data_in) <- my_filters
+  
+    cur_regul_regs <- grabRegulRegions(
+      data_in, ensembl_genes, my_attribs, my_filters, asGRanges = FALSE
+    )
+    return(cur_regul_regs)
+  })
+  names(genes_dmr_ensembl) <- names(dmrff_signif_list)
+
+  saveRDS(genes_dmr_ensembl, file = here("DATA", "DMR_genes_ensembl.rds"))
+} else {
+  genes_dmr_ensembl <- readRDS(here("DATA", "DMR_genes_ensembl.rds"))
+}
+```
+
+Plotting all
+
+```{r plot_dmr_locations}
+walk(names(dmrff_signif_list), function(x){
+  cur_dmrff_pvals_all <- dmrff_3more_list[[x]]
+  cur_dmrff_pvals_signif <- dmrff_signif_list[[x]]
+  cur_dmrff_regs <- regioneR::toGRanges(
+    as.data.frame(
+      dmrff_signif_list[[x]] %>%
+        mutate(chr = "chrX") # ensure that GRanges will be correctly constructed
+    )
+  )
+  cur_genes <- do.call(
+    c,
+    map(genes_dmrff[[x]], function(y){
+      pluck(unlist(y), "genes")
+    })
+  )
+  cur_reg_regs <- regul_regs_dmrff[[x]]
+  cur_gender <- word(string = x, start = 1, end = 1, sep = fixed("."))
+  cur_model <- word(string = x, start = 2, end = -1, sep = fixed("."))
+  which_model <- match(x = cur_model, table = all_model_names)
+  pval_ylim <- range(-log10(cur_dmrff_pvals_all$p.adjust))
+  
+  png(
+    filename = here(
+      "FIGURES", paste0("signif_DMRs_", cur_gender, "_model", which_model, ".png")
+    ),
+    width = 800,
+    height = 480,
+    pointsize = 16
+  )
+  
+  pp <- karyoploteR::getDefaultPlotParams(plot.type = 2)
+  pp$topmargin <- 1
+  pp$data1height <- 50
+  pp$ideogramheight <- 20
+
+  kp <- karyoploteR::plotKaryotype(
+    chromosome = "chrX",
+    plot.type = 2,
+    plot.params = pp
+  )
+  
+  # plot p-values for DMRs
+  karyoploteR::kpPoints(
+    kp,
+    x = cur_dmrff_pvals_signif$start,
+    y = -log10(cur_dmrff_pvals_signif$p.adjust),
+    chr = "chrX",
+    data.panel = 1, cex = 1.5,
+    # r0 = 1, r1 = 0,
+    col = "green",
+    ymin = pval_ylim[1],
+    ymax = pval_ylim[2]
+  )
+  karyoploteR::kpPoints(
+    kp,
+    x = cur_dmrff_pvals_all$start,
+    y = -log10(cur_dmrff_pvals_all$p.adjust),
+    chr = "chrX",
+    data.panel = 1,
+    # r0 = 1, r1 = 0,
+    ymin = pval_ylim[1],
+    ymax = pval_ylim[2]
+  )
+  karyoploteR::kpAxis(kp, data.panel = 1)
+  karyoploteR::kpAddLabels(
+    kp, labels = "-log10(FDR)",
+    srt = 90,
+    data.panel = 1,
+    r0 = 1, r1 = 1.2,
+    label.margin = 0.08
+  )
+  
+  # plot DMRs
+  karyoploteR::kpDataBackground(
+    kp, data.panel = 2,
+    r0 = 0, r1 = 0.2,
+    color = "#EFFFEF" # pale green
+  )
+  karyoploteR::kpPlotRegions(
+    kp,
+    data = cur_dmrff_regs,
+    data.panel = 2,
+    r0 = 0, r1 = 0.2,
+    col = "darkgreen", border = "darkgreen"
+  )
+  karyoploteR::kpAddLabels(
+    kp, labels = "DMR",
+    label.margin = 0.02,
+    data.panel = 2,
+    r0 = 0.1, r1 = 0.15,
+    col = "darkgreen"
+  )
+  
+  # plot regulatory regions
+  if(length(cur_reg_regs) > 0){
+    karyoploteR::kpDataBackground(
+      kp, data.panel = 2,
+      r0 = 0.7, r1 = 0.9,
+      color = "#D3E1FF" # pale blue
+    )
+    karyoploteR::kpPlotRegions(
+      kp, data = cur_reg_regs,
+      data.panel = 2,
+      r0 = 0.7, r1 = 0.9,
+      col = "navyblue", border = "navyblue"
+    )
+    karyoploteR::kpPlotMarkers(
+      kp, data = cur_reg_regs,
+      labels = cur_reg_regs$type,
+      data.panel = 2,
+      r0 = 0.21, r1 = 1.3,
+      text.orientation = "vertical",
+      label.dist = 0.01,
+      label.color = "navyblue", line.color = "navyblue",
+      ignore.chromosome.ends = TRUE
+    )
+    karyoploteR::kpAddLabels(
+      kp, labels = "regulatory\n regions",
+      data.panel = 2,
+      r0 = 0.8, r1 = 0.9,
+      col = "navyblue"
+    )
+  }
+  
+  # plot genes
+  karyoploteR::kpPlotMarkers(
+    kp,
+    data.panel = 2,
+    chr = "chrX",
+    labels = cur_genes$name,
+    data = cur_genes,
+    text.orientation = "vertical",
+    ignore.chromosome.ends = TRUE,
+    r0 = 0.21, r1 = 0.4
+  )
+  karyoploteR::kpAddLabels(
+    kp, labels = "genes",
+    data.panel = 2,
+    # label.margin = 0.01,
+    offset = 0.5,
+    r0 = 0.3, r1 = 0.4
+  )
+  
+  dev.off()
+})
+```
+
+### Nice table
+
+> This table needs to be built and saved on its own.
+
+The newest version is saved here as [nice_table_signif_dmrs_all.html](nice_table_signif_dmrs_all.html).
+
+```{r, eval = FALSE}
+# tidy data
+signif_results_gen_location <- map(
+  names(dmrff_signif_list),
+  function(name){
+    cur_data <- dmrff_signif_list[[name]]
+    cur_regul_regs <- as_tibble(regul_regs_dmrff[[name]])
+    cur_genes_regs <- genes_dmr_ensembl[[name]]
+
+    # adding the information on regulatory regions, if any
+    empty_tbl <- tibble(region_ID = NA,
+            region_type = NA,
+            region_position = NA)
+    out <- bind_cols(
+      cur_data,
+      empty_tbl
+    )
+    if(!is.null(cur_regul_regs)){
+      cur_regul_regs <- cur_regul_regs %>%
+        distinct()
+      out <- map(seq_len(nrow(cur_data)), function(row){
+        cur_row <- cur_data[row,]
+        tmp_regul_regs <- cur_regul_regs %>%
+          filter(
+              cur_row$start <= end &
+              cur_row$end >= start
+            ) %>%
+          mutate(region_position = paste0(
+            "chrX:", format(start, big.mark = ","),
+            "-", format(end, big.mark = ","))) %>%
+          dplyr::select(
+            region_ID = reg_ID,
+            region_type = type,
+            region_position
+          )
+          
+        if(nrow(tmp_regul_regs) == 0){
+          tmp_regul_regs <- empty_tbl
+        }
+        return(bind_cols(cur_row, tmp_regul_regs))
+      }) %>%
+        bind_rows()
+    }
+    # adding the information on genes regions, if any
+    if(!is.null(cur_genes_regs)){
+      cur_genes_regs <- cur_genes_regs %>%
+        distinct()
+      out <- map(seq_len(nrow(out)), function(row){
+        cur_row <- out[row,]
+        tmp_genes_regs <- cur_genes_regs %>%
+          filter(
+              cur_row$start <= end_position &
+              cur_row$end >= start_position
+            ) %>%
+          mutate(gene_position = paste0(
+            "chrX:", format(start_position, big.mark = ","),
+            "-", format(end_position, big.mark = ","))) %>%
+          dplyr::select(
+            gene_ID = ensembl_gene_id,
+            gene_descr = description,
+            gene_name = external_gene_name,
+            gene_position
+          )
+          
+        if(nrow(tmp_genes_regs) == 0){
+          tmp_genes_regs <- tibble(
+            gene_ID = NA,
+            gene_descr = NA,
+            gene_name = NA,
+            gene_position = NA
+          )
+        }
+        return(bind_cols(cur_row, tmp_genes_regs))
+      }) %>%
+        bind_rows()
+    }
+    return(out)
+  }) %>%
+  bind_rows() %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls|Both].1c"),
+    yes = "Model 1",
+    no = NA
+  )) %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls|Both].parents.1c"),
+    yes = "Model 2",
+    no = model
+  )) %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls|Both].1d.bw"),
+    yes = "Model 3",
+    no = model
+  )) %>%
+  mutate(model = ifelse(
+    str_detect(group, "[Boys|Girls|Both].parents.1d.bw"),
+    yes = "Model 4",
+    no = model
+  )) %>%
+  mutate(group = word(group, 1, 1, sep = "\\.")) %>%
+  arrange(group, model, start) %>%
+  group_by(group, model)
+
+# using gt package to make it nice
+signif_results_gen_location_gt <- gt(
+    signif_results_gen_location %>%
+      dplyr::select(!c(chr, B, S, z, se, p.value)) %>%
+      dplyr::mutate(
+        Name = paste0("chrX:", format(start, big.mark = ","), "-",
+                      format(end, big.mark = ",")),
+        .before = start
+      ) %>%
+      dplyr::select(-start, -end)
+  ) %>%
+  tab_header(
+    title = md("**Most significant DMRs (FDR < 0.01 and #CpGs >= 3)**"),
+    subtitle = md("_(grouped by sex and model)_")
+  ) %>%
+  tab_spanner(
+    label = md("**DMR info**"),
+    columns = c(Name, n, estimate, p.adjust)
+  ) %>%
+  tab_spanner(
+    label = md("**Regulatory regions**"),
+    id = "reg_regions",
+    columns = c(region_ID, region_type, region_position)
+  ) %>%
+  tab_spanner(
+    label = md("**Genes**"),
+    id = "genes",
+    columns = c(gene_ID, gene_descr, gene_name, gene_position)
+  ) %>%
+  cols_label(
+    Name = "DMR position",
+    n = "#CpGs",
+    estimate = "Estimate",
+    p.adjust = "FDR",
+    region_ID = "Ensembl ID",
+    region_type = "Region type",
+    region_position = "Position",
+    gene_ID = "Ensembl ID",
+    gene_descr = "Description",
+    gene_name = "Gene ID",
+    gene_position = "Position"
+  ) %>%
+  tab_options(
+    row_group.background.color = "#E6C2AA",
+    row_group.font.weight = "bold",
+    column_labels.background.color = "#F6DA91"
+  ) %>%
+  fmt_scientific(
+    columns = c(p.adjust)
+  ) %>%
+  fmt_number(
+    columns = c(estimate),
+    decimals = 2
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(style = "italic")
+      ),
+    locations = cells_body(
+      columns = gene_descr,
+      rows = !is.na(gene_descr)
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(weight = "bold")
+      ),
+    locations = cells_body(
+      columns = Name
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(align = "center")
+      ),
+    locations = cells_row_groups()
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(align = "center")
+      ),
+    locations = cells_body(
+      rows = is.na(everything())
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(align = "center")
+      ),
+    locations = cells_body(
+      columns = n
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_borders(
+        sides = "right"
+      )
+    ),
+    locations = cells_body(
+      columns = c(p.adjust, region_position)
+    )
+  ) %>%
+  data_color(
+    columns = estimate,
+    colors = scales::col_numeric(
+      palette = scico::scico(7, palette = 'roma'),
+      domain = range(signif_results_gen_location$estimate)
+    )
+  ) %>%
+  tab_footnote(
+    footnote = "Color shading reflects the magnitude and the sign of the estimated effect - from dark red (strong negative effect), through beige (weak negative effect), and dark blue (strong positive effect).",
+    locations = cells_column_labels(
+      columns = estimate
+    )
+  ) %>%
+  tab_footnote(
+    footnote = "NA = Not applicable",
+    locations = cells_column_spanners(
+      spanners = c("reg_regions", "genes")
+    )
+  ) %>%
+  tab_footnote(
+    footnote = "genome build GRCh 37",
+    locations = cells_column_labels(
+      columns = c("gene_position", "Name", "region_position")
+    )
+  )
+# signif_results_gen_location_gt
+```
+
+
+## Zooming on BCAP31, SRPK3, and ABCD1
+
+Find the region to zoom on
+
+```{r zoom_region}
+# function to help with concatenating GRanges without duplicates
+returnNonOverlaps <- function(x, y){
+  # x, y - GRanges
+  which_overlap <- GenomicRanges::findOverlaps(x, y, select = "last", ignore.strand = TRUE)
+  if(!all(is.na(which_overlap))){ # some overlaps found
+    which_overlap <- na.omit(which_overlap)
+    y <- y[-which_overlap]
+  }
+  return(
+    GenomicRanges::sort(c(x, y))
+  )
+}
+
+# extract all genes that are unique
+genes_df <- Reduce(
+  f = returnNonOverlaps,
+  x = map(genes_dmrff[1:5], function(x){
+    cur_genes <- Reduce(returnNonOverlaps, map(x, pluck, "genes"))
+    GenomicRanges::sort(cur_genes)
+  })
+)
+genes_df
+
+chosen_genes_zoom <- c("BCAP31", "SRPK3", "ABCD1")
+zoom_gene <- genes_df[
+  genes_df$name %in% chosen_genes_zoom,
+]
+zoom_gene
+margin_zoom <- c(10000, 20000)
+zoom_region <- regioneR::toGRanges(
+    data.frame(
+      chr = "chrX",
+      start = min(start(zoom_gene)) - margin_zoom[1],
+      end = max(end(zoom_gene)) + margin_zoom[2]
+    )
+  )
+zoom_region
+```
+
+Find the regulatory regions within the zoomed region
+
+```{r zoom_regulatory_region}
+regul_regs_df <- Reduce(
+  f = returnNonOverlaps,
+  x = regul_regs_dmrff
+)
+regul_regs_df
+
+zoom_regulatory_regs <- as_tibble(
+    as.data.frame(regul_regs_df, row.names = NULL)
+  ) %>%
+  distinct() %>%
+  filter(
+    (start <= end(zoom_region) & start >= start(zoom_region)) |
+      (end >= start(zoom_region) & end <= end(zoom_region))
+  )
+zoom_regulatory_regs
+zoom_regulatory_regs <- makeGRangesFromDataFrame(
+  zoom_regulatory_regs,
+  keep.extra.columns = TRUE
+)
+zoom_regulatory_regs
+```
+
+Find the DMRs
+
+```{r zoom_dmrs}
+zoom_dmr_girls <- dmrff_signif_all %>%
+  separate(group, into = c("sex", "model_name"), sep = "\\.", extra = "merge") %>%
+  filter(sex == "Girls") %>%
+  filter(
+    (start <= end(zoom_region) & start >= start(zoom_region)) |
+      (end >= start(zoom_region) & end <= end(zoom_region))
+  )
+zoom_dmr_girls
+
+zoom_dmr_boys <- dmrff_signif_all %>%
+  separate(group, into = c("sex", "model_name"), sep = "\\.", extra = "merge") %>%
+  filter(sex == "Boys") %>%
+  filter(
+    (start <= end(zoom_region) & start >= start(zoom_region)) |
+      (end >= start(zoom_region) & end <= end(zoom_region))
+  )
+zoom_dmr_boys
+```
+
+```{r zoom_ewas, eval=FALSE, echo=FALSE}
+zoom_ewas_signif <- girls_res_signif %>%
+  filter((MAPINFO <= zoom_gene$pos + margin_zoom[2]) &
+           (MAPINFO >= zoom_gene$pos - margin_zoom[1])) %>%
+  ungroup()
+zoom_girls_ewas_signif
+
+zoom_girls_dmr_signif <- dmrff_signif %>%
+  filter((end <= zoom_gene$pos + margin_zoom[2]) &
+           (end >= zoom_gene$pos - margin_zoom[1]) &
+           (start <= zoom_gene$pos + margin_zoom[2]) &
+           (start >= zoom_gene$pos - margin_zoom[1]))
+zoom_girls_dmr_signif
+
+zoom_girls_dmr_signif_regs <- regioneR::toGRanges(
+  data.frame(
+    chr = "chrX",
+    start = unique(zoom_girls_dmr_signif$start),
+    end = unique(zoom_girls_dmr_signif$end),
+    n_cpgs = unique(zoom_girls_dmr_signif$n)
+  )
+)
+```
+
+Plot
+
+```{r zoom_plot}
+png(filename = 
+      here("FIGURES",
+           paste0("zoom_DMR_", chosen_genes_zoom, ".png", collapse = "_")
+      ),
+    width = 1200, height = 640, pointsize = 16)
+
+pp <- karyoploteR::getDefaultPlotParams(plot.type = 2)
+pp$topmargin <- 1
+pp$bottommargin <- 1
+pp$rightmargin <- 0.1
+pp$data1height <- 150
+pp$data2height <- 300
+
+kp_tmp <- karyoploteR::plotKaryotype(
+  chromosome = "chrX",
+  zoom = zoom_region,
+  plot.type = 2,
+  plot.params = pp
+)
+zoom_genes_data <- karyoploteR::makeGenesDataFromTxDb(
+  TxDb.Hsapiens.UCSC.hg19.knownGene, karyoplot = kp_tmp)
+zoom_genes_data <- karyoploteR::addGeneNames(zoom_genes_data)
+zoom_genes_data <- karyoploteR::mergeTranscripts(zoom_genes_data)
+
+# background
+karyoploteR::kpDataBackground(
+  kp_tmp, data.panel = 2,
+  r0 = 0.1, r1 = 0.35,
+  color = "#EFFFEF" # pale green
+)
+karyoploteR::kpDataBackground(
+  kp_tmp, data.panel = 2,
+  r0 = 0.4, r1 = 0.65,
+  color = "#EFFFEF" # pale green
+)
+karyoploteR::kpDataBackground(
+  kp_tmp, data.panel = 2,
+  r0 = 0.7, r1 = 0.8,
+  color = "#D3E1FF" # pale blue
+)
+
+karyoploteR::kpAddBaseNumbers(
+  kp_tmp,
+  tick.dist = 10000,
+  tick.len = 10,
+  minor.ticks = TRUE,
+  minor.tick.dist = 2000,
+  minor.tick.len = 5,
+  cex = 1,
+  add.units = TRUE,
+  digits = 4
+)
+karyoploteR::kpPlotGenes(
+  kp_tmp,
+  data = zoom_genes_data
+)
+
+# plot the DMR
+#  - first: girls
+walk(seq_along(all_model_names), function(x){
+  cur_plot_data <- makeGRangesFromDataFrame(
+      zoom_dmr_girls %>%
+        filter(model_name == all_model_names[x]) %>%
+        mutate(seqnames = "chrX", .before = chr) %>%
+        dplyr::select(-chr),
+      keep.extra.columns = TRUE
+    )
+  cur_plot_r0 <- (x - 1)*0.06 + 0.11
+  cur_plot_r1 <- x*0.06 + 0.09
+  karyoploteR::kpPlotRegions(
+    kp_tmp,
+    data = cur_plot_data,
+    data.panel = 2,
+    r0 = cur_plot_r0,
+    r1 = cur_plot_r1,
+    col = "darkgreen",
+    border = "darkgreen"
+  )
+  karyoploteR::kpAddLabels(
+    kp_tmp,
+    labels = x,
+    data.panel = 2,
+    label.margin = -15.25,
+    side = "right",
+    r0 = cur_plot_r0,
+    r1 = cur_plot_r1,
+    col = "darkgreen"
+  )
+})
+karyoploteR::kpAddLabels(
+  kp_tmp,
+  labels = "model no.",
+  data.panel = 2,
+  label.margin = -15.2,
+  side = "right",
+  r0 = 0.14, r1 = 0.25,
+  col = "darkgreen",
+  srt = 90,
+  pos = 3,
+  cex = 0.8
+)
+karyoploteR::kpAddLabels(
+  kp_tmp, labels = "DMRs\n girls-only",
+  data.panel = 2,
+  label.margin = 0.01,
+  r0 = 0.15, r1 = 0.25,
+  col = "darkgreen"
+)
+#  - next: boys
+walk(seq_along(all_model_names), function(x){
+  cur_plot_data <- makeGRangesFromDataFrame(
+      zoom_dmr_boys %>%
+        filter(model_name == all_model_names[x]) %>%
+        mutate(seqnames = "chrX", .before = chr) %>%
+        dplyr::select(-chr),
+      keep.extra.columns = TRUE
+    )
+  cur_plot_r0 <- (x - 1)*0.06 + 0.41
+  cur_plot_r1 <- x*0.06 + 0.39
+  karyoploteR::kpPlotRegions(
+    kp_tmp,
+    data = cur_plot_data,
+    data.panel = 2,
+    r0 = cur_plot_r0,
+    r1 = cur_plot_r1,
+    col = "darkgreen",
+    border = "darkgreen"
+  )
+  karyoploteR::kpAddLabels(
+    kp_tmp,
+    labels = x,
+    data.panel = 2,
+    label.margin = -15.25,
+    side = "right",
+    r0 = cur_plot_r0,
+    r1 = cur_plot_r1,
+    col = "darkgreen"
+  )
+})
+karyoploteR::kpAddLabels(
+  kp_tmp,
+  labels = "model no.",
+  data.panel = 2,
+  label.margin = -15.2,
+  side = "right",
+  r0 = 0.44, r1 = 0.55,
+  col = "darkgreen",
+  srt = 90,
+  pos = 3,
+  cex = 0.8
+)
+karyoploteR::kpAddLabels(
+  kp_tmp, labels = "DMRs\n boys-only",
+  data.panel = 2,
+  label.margin = 0.01,
+  r0 = 0.45, r1 = 0.55,
+  col = "darkgreen"
+)
+
+# plot the regulatory regions
+karyoploteR::kpPlotRegions(
+  kp_tmp,
+  data = zoom_regulatory_regs,
+  data.panel = 2,
+  r0 = 0.7,
+  r1 = 0.8,
+  col = "navyblue",
+  border = "navyblue"
+)
+karyoploteR::kpPlotMarkers(
+  kp_tmp,
+  data = zoom_regulatory_regs,
+  labels = paste0(zoom_regulatory_regs$type, "\n (",
+                  zoom_regulatory_regs$reg_ID, ")"),
+  data.panel = 2,
+  r0 = 0.7,
+  r1 = 0.9,
+  text.orientation = "horizontal", clipping = FALSE,
+  label.dist = 0.01,
+  label.color = "navyblue",
+  line.color = "navyblue"#,
+  # ignore.chromosome.ends = TRUE
+)
+karyoploteR::kpAddLabels(
+  kp_tmp,
+  labels = "regulatory\n regions",
+  data.panel = 2,
+  r0 = 0.72,
+  r1 = 0.8,
+  col = "navyblue"
+)
+
+dev.off()
+```
+
+## Zooming on the most significant DMR in girls-only analyses
+
+Find the DMRs
+
+```{r zoom2_dmrs}
+zoom_dmr_signif_girls <- dmrff_signif_all %>%
+  separate(group, into = c("sex", "model_name"), sep = "\\.", extra = "merge") %>%
+  filter(sex == "Girls") %>%
+  group_by(model_name) %>%
+  filter(p.adjust == min(p.adjust)) %>%
+  ungroup()
+zoom_dmr_signif_girls
+```
+
+Find the region to zoom on
+
+```{r zoom2_region}
+margin_zoom <- rep(50000, 2)
+zoom_region <- regioneR::toGRanges(
+    data.frame(
+      chr = "chrX",
+      start = zoom_dmr_signif_girls$start[1] - margin_zoom[1],
+      end = zoom_dmr_signif_girls$end[1] + margin_zoom[2]
+    )
+  )
+zoom_region
+```
+
+Find the regulatory regions within the zoomed region
+
+```{r zoom2_regulatory_region}
+zoom_regulatory_regs <- as_tibble(
+    as.data.frame(regul_regs_df, row.names = NULL)
+  ) %>%
+  distinct() %>%
+  filter(
+    (start <= end(zoom_region) & start >= start(zoom_region)) |
+      (end >= start(zoom_region) & end <= end(zoom_region))
+  )
+zoom_regulatory_regs
+zoom_regulatory_regs <- makeGRangesFromDataFrame(
+  zoom_regulatory_regs,
+  keep.extra.columns = TRUE
+)
+zoom_regulatory_regs
+```
+
+Plot
+
+```{r zoom2_plot}
+png(filename = 
+      here("FIGURES", "zoom_DMR_most_signif_girls.png"),
+    width = 1200, height = 640, pointsize = 16)
+
+pp <- karyoploteR::getDefaultPlotParams(plot.type = 2)
+pp$topmargin <- 1
+pp$bottommargin <- 1
+pp$rightmargin <- 0.1
+pp$data1height <- 150
+pp$data2height <- 300
+
+kp_tmp <- karyoploteR::plotKaryotype(
+  chromosome = "chrX",
+  zoom = zoom_region,
+  plot.type = 2,
+  plot.params = pp
+)
+zoom_genes_data <- karyoploteR::makeGenesDataFromTxDb(
+  TxDb.Hsapiens.UCSC.hg19.knownGene, karyoplot = kp_tmp)
+zoom_genes_data <- karyoploteR::addGeneNames(zoom_genes_data)
+zoom_genes_data <- karyoploteR::mergeTranscripts(zoom_genes_data)
+
+# background
+karyoploteR::kpDataBackground(
+  kp_tmp, data.panel = 2,
+  r0 = 0.1, r1 = 0.45,
+  color = "#EFFFEF" # pale green
+)
+karyoploteR::kpDataBackground(
+  kp_tmp, data.panel = 2,
+  r0 = 0.5, r1 = 0.6,
+  color = "#D3E1FF" # pale blue
+)
+
+karyoploteR::kpAddBaseNumbers(
+  kp_tmp,
+  tick.dist = 10000,
+  tick.len = 10,
+  minor.ticks = TRUE,
+  minor.tick.dist = 2000,
+  minor.tick.len = 5,
+  cex = 1,
+  add.units = TRUE,
+  digits = 4
+)
+karyoploteR::kpPlotGenes(
+  kp_tmp,
+  data = zoom_genes_data
+)
+
+# plot the DMR
+#  - first: girls
+walk(seq_along(all_model_names), function(x){
+  cur_plot_data <- makeGRangesFromDataFrame(
+      zoom_dmr_signif_girls %>%
+        filter(model_name == all_model_names[x]) %>%
+        mutate(seqnames = "chrX", .before = chr) %>%
+        dplyr::select(-chr),
+      keep.extra.columns = TRUE
+    )
+  cur_plot_r0 <- (x - 1)*0.09 + 0.11
+  cur_plot_r1 <- x*0.09 + 0.09
+  karyoploteR::kpPlotRegions(
+    kp_tmp,
+    data = cur_plot_data,
+    data.panel = 2,
+    r0 = cur_plot_r0,
+    r1 = cur_plot_r1,
+    col = "darkgreen",
+    border = "darkgreen"
+  )
+  karyoploteR::kpAddLabels(
+    kp_tmp,
+    labels = x,
+    data.panel = 2,
+    label.margin = -291.96,
+    side = "right",
+    r0 = cur_plot_r0,
+    r1 = cur_plot_r1,
+    col = "darkgreen"
+  )
+})
+karyoploteR::kpAddLabels(
+  kp_tmp,
+  labels = "model no.",
+  data.panel = 2,
+  label.margin = -291.92,
+  side = "right",
+  r0 = 0.2,
+  r1 = 0.3,
+  col = "darkgreen",
+  srt = 90,
+  pos = 3
+)
+karyoploteR::kpAddLabels(
+  kp_tmp, labels = "DMRs\n girls-only",
+  data.panel = 2,
+  label.margin = 0.01,
+  r0 = 0.2, r1 = 0.3,
+  col = "darkgreen"
+)
+
+# plot the regulatory regions
+karyoploteR::kpPlotRegions(
+  kp_tmp,
+  data = zoom_regulatory_regs,
+  data.panel = 2,
+  r0 = 0.5,
+  r1 = 0.6,
+  col = "navyblue",
+  border = "navyblue"
+)
+karyoploteR::kpPlotMarkers(
+  kp_tmp,
+  data = zoom_regulatory_regs,
+  labels = paste0(zoom_regulatory_regs$type, " (",
+                  zoom_regulatory_regs$reg_ID, ")"),
+  data.panel = 2,
+  r0 = 0.5,
+  r1 = 0.8,
+  text.orientation = "horizontal", clipping = FALSE,
+  label.dist = 0.01,
+  label.color = "navyblue",
+  line.color = "navyblue"#,
+  # ignore.chromosome.ends = TRUE
+)
+karyoploteR::kpAddLabels(
+  kp_tmp,
+  labels = "regulatory\n regions",
+  data.panel = 2,
+  r0 = 0.5,
+  r1 = 0.6,
+  col = "navyblue"
+)
+
+dev.off()
+```
+
+## All the DMRs summarized
+
+All the genes where DMRs are located (but this will not give me all the
+genes that can be _affected_ by the CpGs in the DMRs).
+
+```{r dmrs_genes}
+# save names in plain text for later use
+walk(names(genes_dmr_ensembl), function(name){
+  cur_gender <- word(name, 1, 1, sep = "\\.")
+  cur_model <- match(word(name, 2, -1, sep = "\\."), all_model_names)
+  write_delim(
+    genes_dmr_ensembl[[name]] %>%
+      dplyr::select(ensembl_gene_id, start_position,
+             end_position, name = external_gene_name, description) %>%
+      distinct(),
+    here("DATA", paste0("genes_in_DMRs_", cur_gender, "_model", cur_model, ".txt")),
+    delim = "\t"
+  )
+})
+```
+
+Save the promoter IDs.
+
+```{r dmr_regul_regs}
+walk(names(regul_regs_dmrff), function(name){
+  cur_gender <- word(name, 1, 1, sep = "\\.")
+  cur_model <- match(word(name, 2, -1, sep = "\\."), all_model_names)
+  write_delim(
+    as_tibble(regul_regs_dmrff[[name]]) %>%
+      dplyr::select(reg_ID, chr = seqnames, start, end, type) %>%
+      distinct(),
+    here("DATA", paste0("regul_regs_in_DMRs_", cur_gender, "_model", cur_model, ".txt")),
+    delim = "\t"
+  )
+})
+
+regul_regs_dmrff_all <- map(names(regul_regs_dmrff), function(name){
+  cur_gender <- word(name, 1, 1, sep = "\\.")
+  cur_model <- match(word(name, 2, -1, sep = "\\."), all_model_names)
+  return(
+    as_tibble(regul_regs_dmrff[[name]]) %>%
+      dplyr::select(reg_ID, chr = seqnames, start, end, type) %>%
+      tibble::add_column(
+        gender = cur_gender,
+        model = paste0("model", cur_model)
+      ) %>%
+      distinct()
+  )
+}) %>%
+  bind_rows()
+regul_regs_dmrff_all
+
+regul_regs_dmrff_all_grouped <- regul_regs_dmrff_all %>%
+  group_by(reg_ID) %>%
+  summarise(all_models = paste(paste(gender, model, sep = "_"), collapse = ",")) %>%
+  left_join(
+    regul_regs_dmrff_all %>%
+      dplyr::select(reg_ID, chr, start, end, type) %>%
+      distinct()
+  )
+regul_regs_dmrff_all_grouped
+
+write_delim(
+  regul_regs_dmrff_all_grouped,
+  file = here("DATA", "regul_regs_in_DMRs_grouped.txt"),
+  delim = "\t"
+)
+```
+

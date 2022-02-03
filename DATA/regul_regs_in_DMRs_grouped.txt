@@ -1,0 +1,20 @@
+reg_ID	all_models	chr	start	end	type
+ENSR00000244760	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	15510000	15512201	Promoter
+ENSR00000245106	Boys_model1,Boys_model3,Boys_model2,Boys_model4	chrX	20134000	20135600	Promoter
+ENSR00000245518	Boys_model3	chrX	30670200	30675201	Promoter
+ENSR00000245550	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	31281801	31285401	Promoter
+ENSR00000246526	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	48767200	48770801	Promoter
+ENSR00000248346	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	118698200	118699801	Promoter
+ENSR00000249590	Girls_model1,Girls_model3,Girls_model2	chrX	152987600	152993201	Promoter
+ENSR00000249598	Girls_model4	chrX	153058200	153062201	Promoter
+ENSR00000249678	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	153716801	153720001	Promoter
+ENSR00000422673	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	15511801	15512200	CTCF Binding Site
+ENSR00000423313	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	47861600	47864400	Promoter
+ENSR00000423354	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	48812800	48817201	Promoter
+ENSR00000423364	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	48929201	48932401	Promoter
+ENSR00000423844	Girls_model2,Girls_model4	chrX	100645001	100648401	Promoter
+ENSR00000423848	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	100660200	100666201	Promoter
+ENSR00001482488	Boys_model3	chrX	100546001	100546600	Promoter
+ENSR00002096583	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	25029001	25034600	Promoter
+ENSR00002097003	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	31285001	31285200	CTCF Binding Site
+ENSR00002105690	Boys_model1,Boys_model3,Boys_model2,Boys_model4	chrX	153046600	153047001	Promoter

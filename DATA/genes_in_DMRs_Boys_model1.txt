@@ -1,0 +1,3 @@
+ensembl_gene_id	start_position	end_position	name	description
+ENSG00000184343	153041867	153051187	SRPK3	SRSF protein kinase 3 [Source:HGNC Symbol;Acc:11402]
+ENSG00000229547	84189157	84189896	UBE2DNL	ubiquitin-conjugating enzyme E2D N-terminal like (pseudogene) [Source:HGNC Symbol;Acc:28656]

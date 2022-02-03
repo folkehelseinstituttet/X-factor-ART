@@ -1,0 +1,2 @@
+ensembl_gene_id	start_position	end_position	name	description
+ENSG00000184343	153041867	153051187	SRPK3	SRSF protein kinase 3 [Source:HGNC Symbol;Acc:11402]
