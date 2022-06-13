@@ -1,33 +1,40 @@
 # DESCRIPTION:
 #   function to find genes positioned in the given region; uses karyoploteR
 #   TxDb.Hsapiens.UCSC.hg19.knownGene, org.Hs.eg.db, and regioneR
-#' @param positions - data.frame with 'start' and 'end' columns (any other
-#'   columns will be ignored)
-#' @param chromosome - which chromosome? string in format "chrA", where 'A'
-#'   needs to be one of 1-22 or X or Y
+#' @param positions - data.frame with 'chromosome_name", 'start', and 'end'
+#'   columns (all other columns will be ignored)
+#' @param asGRanges - whether to return the results as GRanges (check
+#'    regioneR::GRanges for help) - boolean, defaults to FALSE
 #' 
 
 grabGenes <- function(
   positions,
-  chromosome,
   asGRangesList = TRUE
 ){
   requireNamespace('org.Hs.eg.db', quietly = TRUE)
   requireNamespace('AnnotationDbi', quietly = TRUE)
   requireNamespace('Biobase', quietly = TRUE)
   
-  genes_data_list <- purrr::map(1:nrow(positions), function(row){
-    cur_row <- positions[row,]
+  # check the format of 'chromosome_name'
+  positions_cp <- positions %>%
+    mutate(chromosome_name = ifelse(
+      grepl("chr", chromosome_name),
+      yes = chromosome_name,
+      no = paste0("chr", chromosome_name)
+    ))
+
+  genes_data_list <- purrr::map(1:nrow(positions_cp), function(row){
+    cur_row <- positions_cp[row,]
     positions_ranges <- regioneR::toGRanges(
       data.frame(
-        chr = chromosome,
+        chr = cur_row$chromosome_name,
         start = cur_row$start,
         end = cur_row$end
       )
     )
     pdf(NULL)
     kp_tmp <- karyoploteR::plotKaryotype(
-      chromosome = chromosome,
+      chromosomes = cur_row$chromosome_name,
       zoom = positions_ranges
     )
     genes.data <- suppressMessages(karyoploteR::makeGenesDataFromTxDb(
@@ -50,11 +57,8 @@ grabGenes <- function(
         return(NULL)
       }
       return(
-        tibble(
-          pos = GenomicRanges::start(d$genes),
-          end = GenomicRanges::end(d$genes),
-          gene_name = GenomicRanges::mcols(d$genes)$name
-        )
+        as_tibble(d$genes) %>%
+          dplyr::select(chr = seqnames, start, end, strand, gene_name = name)
       )
     }) %>% bind_rows() %>%
       distinct()

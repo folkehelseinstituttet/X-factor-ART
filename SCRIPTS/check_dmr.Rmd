@@ -12,10 +12,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, dpi = 150, cache = TRUE)
 
 library(tidyverse)
-library(skimr)
 library(gghighlight)
 library(ggiraph)
-library(dmrff) # installed from github
 # library(karyoploteR) # <- I'm using their functions, but explicitly since
                        # there was some crash of these functions with another pkg
 library(sanzo)
@@ -43,9 +41,6 @@ all_model_names <- c("1c", "parents.1c", "1d.bw", "parents.1d.bw")
 # Read data
 
 ```{r load_data}
-# # EWAS results
-# ewas_results <- readRDS(here("DATA", "XchromosomeResultsSexStratified.rds"))
-
 # CpG data
 cpg_info <- readRDS(here("DATA", "CpG_info_Xchrom_manifest.rds"))
 
@@ -243,7 +238,7 @@ if(!file.exists(genes_dmrs_file)){
     colnames(data_in) <- c("chromosome_name", "start", "end")
   
     cur_genes <- grabGenes(
-      data_in, chromosome = "chrX", asGRanges = TRUE
+      data_in, asGRanges = TRUE
     )
     return(cur_genes)
   })
@@ -556,142 +551,13 @@ signif_results_gen_location <- map(
   arrange(group, model, start) %>%
   group_by(group, model)
 
-# using gt package to make it nice
-signif_results_gen_location_gt <- gt(
-    signif_results_gen_location %>%
-      dplyr::select(!c(chr, B, S, z, se, p.value)) %>%
-      dplyr::mutate(
-        Name = paste0("chrX:", format(start, big.mark = ","), "-",
-                      format(end, big.mark = ",")),
-        .before = start
-      ) %>%
-      dplyr::select(-start, -end)
-  ) %>%
-  tab_header(
-    title = md("**Most significant DMRs (FDR < 0.01 and #CpGs >= 3)**"),
-    subtitle = md("_(grouped by sex and model)_")
-  ) %>%
-  tab_spanner(
-    label = md("**DMR info**"),
-    columns = c(Name, n, estimate, p.adjust)
-  ) %>%
-  tab_spanner(
-    label = md("**Regulatory regions**"),
-    id = "reg_regions",
-    columns = c(region_ID, region_type, region_position)
-  ) %>%
-  tab_spanner(
-    label = md("**Genes**"),
-    id = "genes",
-    columns = c(gene_ID, gene_descr, gene_name, gene_position)
-  ) %>%
-  cols_label(
-    Name = "DMR position",
-    n = "#CpGs",
-    estimate = "Estimate",
-    p.adjust = "FDR",
-    region_ID = "Ensembl ID",
-    region_type = "Region type",
-    region_position = "Position",
-    gene_ID = "Ensembl ID",
-    gene_descr = "Description",
-    gene_name = "Gene ID",
-    gene_position = "Position"
-  ) %>%
-  tab_options(
-    row_group.background.color = "#E6C2AA",
-    row_group.font.weight = "bold",
-    column_labels.background.color = "#F6DA91"
-  ) %>%
-  fmt_scientific(
-    columns = c(p.adjust)
-  ) %>%
-  fmt_number(
-    columns = c(estimate),
-    decimals = 2
-  ) %>%
-  tab_style(
-    style = list(
-      cell_text(style = "italic")
-      ),
-    locations = cells_body(
-      columns = gene_descr,
-      rows = !is.na(gene_descr)
-    )
-  ) %>%
-  tab_style(
-    style = list(
-      cell_text(weight = "bold")
-      ),
-    locations = cells_body(
-      columns = Name
-    )
-  ) %>%
-  tab_style(
-    style = list(
-      cell_text(align = "center")
-      ),
-    locations = cells_row_groups()
-  ) %>%
-  tab_style(
-    style = list(
-      cell_text(align = "center")
-      ),
-    locations = cells_body(
-      rows = is.na(everything())
-    )
-  ) %>%
-  tab_style(
-    style = list(
-      cell_text(align = "center")
-      ),
-    locations = cells_body(
-      columns = n
-    )
-  ) %>%
-  tab_style(
-    style = list(
-      cell_borders(
-        sides = "right"
-      )
-    ),
-    locations = cells_body(
-      columns = c(p.adjust, region_position)
-    )
-  ) %>%
-  data_color(
-    columns = estimate,
-    colors = scales::col_numeric(
-      palette = scico::scico(7, palette = 'roma'),
-      domain = range(signif_results_gen_location$estimate)
-    )
-  ) %>%
-  tab_footnote(
-    footnote = "Color shading reflects the magnitude and the sign of the estimated effect - from dark red (strong negative effect), through beige (weak negative effect), and dark blue (strong positive effect).",
-    locations = cells_column_labels(
-      columns = estimate
-    )
-  ) %>%
-  tab_footnote(
-    footnote = "NA = Not applicable",
-    locations = cells_column_spanners(
-      spanners = c("reg_regions", "genes")
-    )
-  ) %>%
-  tab_footnote(
-    footnote = "genome build GRCh 37",
-    locations = cells_column_labels(
-      columns = c("gene_position", "Name", "region_position")
-    )
-  )
-# signif_results_gen_location_gt
 ```
 
-```{r nice_table_flextable, eval = FALSE}
+```{r nice_table_flextable}
 # using flextable package
 signif_results_gen_location_flex <- flextable(
   data = signif_results_gen_location %>%
-      dplyr::select(!c(chr, B, S, z, se, p.value)) %>%
+      dplyr::select(!c(chr, z, se, p.value)) %>%
       dplyr::mutate(
         Name = paste0("chrX:", format(start, big.mark = ","), "-",
                       format(end, big.mark = ",")),
@@ -734,7 +600,7 @@ signif_results_gen_location_flex <- flextable(
 # signif_results_gen_location_flex
 save_as_html(
   signif_results_gen_location_flex,
-  path = here("RESULTS", "flextable_signif_dmrs.html"),
+  path = here("flextable_signif_dmrs.html"),
   title = "Significant DMR findings, XWAS of ART vs. non-ART"
 )
 ```
