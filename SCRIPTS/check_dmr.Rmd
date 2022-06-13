@@ -23,6 +23,8 @@ library(here)
 library(biomaRt) # from Bioconductor
 library(UpSetR) # from Bioconductor
 library(TxDb.Hsapiens.UCSC.hg19.knownGene) # from Bioconductor
+library(gt)
+library(flextable)
 
 signif_pval_thresh <- 0.01
 min_cpgs_in_dmr <- 3
@@ -356,7 +358,12 @@ walk(names(dmrff_signif_list), function(x){
     ymin = pval_ylim[1],
     ymax = pval_ylim[2]
   )
-  karyoploteR::kpAxis(kp, data.panel = 1)
+  karyoploteR::kpAxis(
+    kp,
+    data.panel = 1,
+    ymin = pval_ylim[1],
+    ymax = pval_ylim[2]
+  )
   karyoploteR::kpAddLabels(
     kp, labels = "-log10(FDR)",
     srt = 90,
@@ -678,6 +685,58 @@ signif_results_gen_location_gt <- gt(
     )
   )
 # signif_results_gen_location_gt
+```
+
+```{r nice_table_flextable, eval = FALSE}
+# using flextable package
+signif_results_gen_location_flex <- flextable(
+  data = signif_results_gen_location %>%
+      dplyr::select(!c(chr, B, S, z, se, p.value)) %>%
+      dplyr::mutate(
+        Name = paste0("chrX:", format(start, big.mark = ","), "-",
+                      format(end, big.mark = ",")),
+        .before = start
+      ) %>%
+      dplyr::select(-start, -end) %>%
+      dplyr::select(group, model, everything())
+  ) %>%
+  add_header_row(
+    values = c("Model", "DMR info", "Regulatory regions", "Genes"),
+    colwidths = c(2, 4, 3, 4)
+  ) %>%
+  bg(
+    j = "estimate",
+    bg = scales::col_numeric(
+      palette = scico::scico(7, palette = 'roma'),
+      domain = range(signif_results_gen_location$estimate)
+    )
+  ) %>%
+  colformat_double(
+    j = "estimate",
+    digits = 2
+  ) %>%
+  set_formatter(
+    p.adjust = function(x) sprintf("%.2e", x)
+  ) %>%
+  merge_v(
+    j = ~ Name + n + estimate + p.adjust + region_ID + gene_ID +
+      region_position + region_type + gene_descr + gene_name + gene_position +
+      group + model
+  ) %>%
+  rotate(
+    j = c("group", "model"),
+    rotation = "btlr"
+  ) %>%
+  border_inner_h(
+    part = "all",
+    border = officer::fp_border(color = "grey", width = 1)
+  )
+# signif_results_gen_location_flex
+save_as_html(
+  signif_results_gen_location_flex,
+  path = here("RESULTS", "flextable_signif_dmrs.html"),
+  title = "Significant DMR findings, XWAS of ART vs. non-ART"
+)
 ```
 
 

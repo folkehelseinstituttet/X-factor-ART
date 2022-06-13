@@ -29,7 +29,7 @@ source(here("SCRIPTS", "grabGenes.R"))
 #  translate it to model 1, 2, 3, 4
 all_model_names <- c("1c", "parents.1c", "1d.bw", "parents.1d.bw")
 
-signif_pval_thresh <- 0.05
+signif_pval_thresh <- 0.01
 chr <- "X"
 ```
 
@@ -345,6 +345,61 @@ ggplot(ewas_results_tbl, aes(effect_size)) +
   labs(title = "Density of effect size estimates")
 
 ggsave(here("FIGURES", "density_effect_size_compare.png"))
+```
+
+```{r volcano_plots_model1, fig.show='hide', fig.keep='none'}
+volcano_pl_m1_b4b <- ewas_results_tbl %>%
+  filter(model == "Model 1") %>%
+  ggplot(aes(effect_size, -log10(old_ps))) +
+  geom_point(aes(col = old_signif), size = 0.8) +
+  scale_color_manual(
+    "Significant?",
+    values = c("black", "orange"),
+    labels = c("NO", "YES")
+  ) +
+  facet_grid(rows = vars(group)) +
+  xlab("effect size") +
+  ylab("-log10( raw p-value )") +
+  theme_bw() +
+  labs(
+    # title = "Effect size vs unadjusted p-value for all CpGs on X-chrom",
+    title = "A) before BACON adjustment",
+  ) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(face = "bold.italic"),
+    plot.title.position = "plot"
+  )
+
+volcano_pl_m1_a4b <- ewas_results_tbl %>%
+  filter(model == "Model 1") %>%
+  ggplot(aes(effect_size, -log10(ps))) +
+  geom_point(aes(col = signif), size = 0.8) +
+  scale_color_manual(
+    "Significant?",
+    values = c("black", "orange"),
+    labels = c("NO", "YES")
+  ) +
+  facet_grid(rows = vars(group)) +
+  xlab("effect size") +
+  ylab("-log10( raw p-value )") +
+  theme_bw() +
+  labs(
+    # title = "Effect size vs unadjusted p-value for all CpGs on X-chrom",
+    title = "B) after BACON adjustment"
+  ) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(face = "bold.italic"),
+    plot.title.position = "plot"
+  )
+
+(volcano_pl_m1_b4b + volcano_pl_m1_a4b) + plot_layout(guides = "collect")
+ggsave(
+  here("FIGURES", "volcano_plots_m1.png"),
+  width = 10,
+  height = 6
+)
 ```
 
 ```{r volcano_plots_together, fig.show='hide', fig.keep='none'}
