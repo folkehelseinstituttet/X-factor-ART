@@ -1,4 +1,4 @@
-reg_ID	chr	start	end	type
+regulatory_stable_id	chr	start	end	feature_type_name
 ENSR00002105690	chrX	153046600	153047001	Promoter
 ENSR00000245106	chrX	20134000	20135600	Promoter
 ENSR00001482488	chrX	100546001	100546600	Promoter

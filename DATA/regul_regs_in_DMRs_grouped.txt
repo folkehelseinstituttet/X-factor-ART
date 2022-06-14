@@ -1,4 +1,4 @@
-reg_ID	all_models	chr	start	end	type
+regulatory_stable_id	all_models	chr	start	end	feature_type_name
 ENSR00000244760	Girls_model1,Girls_model3,Girls_model2,Girls_model4	chrX	15510000	15512201	Promoter
 ENSR00000245106	Boys_model1,Boys_model3,Boys_model2,Boys_model4	chrX	20134000	20135600	Promoter
 ENSR00000245518	Boys_model3	chrX	30670200	30675201	Promoter
