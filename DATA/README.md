@@ -4,7 +4,7 @@ All the data and results that can be made public.
 
 ### XchromosomeResultsSexStratified.rds
 
-All the results of EWAS on the CpG probes on X-chromosome.
+All the results of XWASes (EWAS on the CpG probes on X-chromosome) on MoBa data.
 
 List of `tibbles` named as follows:
 
@@ -30,7 +30,7 @@ Each tibble has the following variables:
 
 ### DMRFFResults.rds
 
-All the results of running DMRff (finding differentially methylated regions).
+All the results of running DMRff (finding differentially methylated regions) on MoBa data.
 
 The R-package can be found here: https://github.com/perishky/dmrff
 
@@ -83,6 +83,14 @@ regul_regs <- readRDS(
 )
 ```
 
+Analogously, there are `DMR_genes.rds` and `DMR_regul_regs.rds` that hold
+`GRanges` objects with genes or regulatory regions within significant DMRs.
+`DMR_genes_ensembl.rds` holds the same information as `DMR_genes.rds` but in
+a tibble format, taken from ensembl through query via `biomaRt`.
+
+For convenience, these data is saved also in tab-delimited text files beginning
+with `genes_in_DMRs_` or `regul_regs_in_DMRs_`.
+
 ### Matrices of DNA methylation correlation
 
 All the files beginning with `correlation_plot_` or `correlation_matrix_`
@@ -101,3 +109,72 @@ corr_matrix <- readRDS(
   here("DATA", "correlation_matrix_girls_model1_cg26175661.rds.txt")
 )
 ```
+
+### Data cleaning and analysis of data on transcription factor (TF) binding to methylated DNA
+
+Supplementary material available together with publication
+Yin, Y., et al. Science, 356(6337), 2017. https://doi.org/10.1126/science.aaj2239
+was not given in an analysis-friendly way, so we have extracted the necessary
+information from the PDF document with figures and gathered it here.
+(See [README in teh SCRIPTS folder](../SCRIPTS/README.md) for details).
+
+- `extracted_lines_clean.txt` - raw extracted text
+- `extracted_lines_clean.txt` - cleaned raw data
+- `extracted_lines_clean_all.dat` - final dataset in the format:
+
+|  _variable name_       |   _format_     |    _description_       |
+|:-----------------------|:--------------:|:-----------------------|
+| `TF_name`              | character      | TF name (gene name)    |
+| `part_tested`          | character      | which part of the protein was tested? (check Yin et al. for details) |
+| `class`                | character      | classification of TF according to sensitivity to methylation of DNA binding site(s) |
+| `note`                 | character      | comments (if any)       |
+
+- `yin_science_2017_TF_types.txt` gives a short overview of the classification
+of TFs made in Yin et al. study
+
+### Checking significant CpGs vs TFs that bind methylated DNA
+
+- `TFs_binding_to_CpGs_JASPAR_ensembl.dat` - data collected from JASPAR 2022 TFBS hg19 via visualization in ensembl; format:
+
+|  _variable name_       |   _format_     |    _description_       |
+|:-----------------------|:--------------:|:-----------------------|
+| `CpG`                  | character      | CpG name               |
+| `TF_name`              | character      | TF name (gene name)    |
+| `in_MeDReader`         | boolean        | included in MeDReader DB or not? |
+
+- `TFs_binding_signif_CpGs_cleaned_all.dat` - all the TFs that bind to the significant CpGs and were checked in Yin et al. study; format:
+
+|  _variable name_       |   _format_     |    _description_       |
+|:-----------------------|:--------------:|:-----------------------|
+| `CpG`                  | character      | CpG name               |
+| `TF_name`              | character      | TF name (gene name)    |
+| `in_MeDReader`         | boolean        | included in MeDReader DB or not? |
+| `part_tested`          | character      | which part of the protein was tested? (check Yin et al. for details) |
+| `class`                | character      | classification of TF according to sensitivity to methylation of DNA binding site(s) |
+| `note`                 | character      | comments (if any)       |
+
+- `TFs_methyl_sensitive_signif_CpGs.dat` - only methylation-sensitive TFs from the file above (the same format)
+
+## Replication results
+
+The files starting with `CHART_` contain XWAS results on replication cohort
+(CHART cohort, Australia), using `limma` R package. Format:
+
+|  _variable name_       |   _format_     |    _description_       |
+|:-----------------------|:--------------:|:-----------------------|
+|                        | character      | CpG name (rowname)     |  
+|   logFC                | numeric        | log fold change        |
+|       t                | numeric        | t statistic            |
+| P.Value                | numeric        | raw p-value            |
+| adj.P.Val              | numeric        | FDR-adjusted p-value   |
+|       B                | numeric        | |
+| Male_ART_mean          | numeric        | mean value of beta (DNAm) for males conceived through ART |
+| Female_ART_mean        | numeric        | mean value of beta (DNAm) for females conceived through ART |
+| Male_nonART_mean       | numeric        | mean value of beta (DNAm) for males conceived naturally |
+| Female_nonART_mean     | numeric        | mean value of beta (DNAm) for females conceived naturally |
+| bacon_pvalue           | numeric        | p-value after adjustment with BACON algortithm |
+
+## Bootstrapping results
+
+Rank tables after bootstrapping of the XWAS results on MoBa data are available
+in `bootstrap_results_boys_final.csv` and `bootstrap_results_girls_final.csv`.
