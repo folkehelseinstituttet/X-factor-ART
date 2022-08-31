@@ -4,7 +4,7 @@ All the data and results that can be made public.
 
 ### XchromosomeResultsSexStratified.rds
 
-All the results of XWASes (EWAS on the CpG probes on X-chromosome) on MoBa data.
+All the results of running different XWASes (EWAS on the CpG probes on the X-chromosome) on the MoBa data.
 
 List of `tibbles` named as follows:
 
@@ -30,7 +30,7 @@ Each tibble has the following variables:
 
 ### DMRFFResults.rds
 
-All the results of running DMRff (finding differentially methylated regions) on MoBa data.
+All the results of running DMRff (finding differentially methylated regions) on the MoBa data.
 
 The R-package can be found here: https://github.com/perishky/dmrff
 
@@ -54,7 +54,7 @@ Each tibble has the following variables:
 
 `tibble` with the information about all the CpG probes that are on X chromosome
 on the EPIC array. Taken from the original Illumina Manifest file (available
-on the net: https://support.illumina.com/array/array_kits/infinium-methylationepic-beadchip-kit/downloads.html).
+online at https://support.illumina.com/array/array_kits/infinium-methylationepic-beadchip-kit/downloads.html.
 
 Some important fields are listed below:
 
@@ -88,7 +88,7 @@ Analogously, there are `DMR_genes.rds` and `DMR_regul_regs.rds` that hold
 `DMR_genes_ensembl.rds` holds the same information as `DMR_genes.rds` but in
 a tibble format, taken from ensembl through query via `biomaRt`.
 
-For convenience, these data is saved also in tab-delimited text files beginning
+For convenience, these data are also saved in tab-delimited text files beginning
 with `genes_in_DMRs_` or `regul_regs_in_DMRs_`.
 
 ### Matrices of DNA methylation correlation
@@ -112,11 +112,11 @@ corr_matrix <- readRDS(
 
 ### Data cleaning and analysis of data on transcription factor (TF) binding to methylated DNA
 
-Supplementary material available together with publication
-Yin, Y., et al. Science, 356(6337), 2017. https://doi.org/10.1126/science.aaj2239
-was not given in an analysis-friendly way, so we have extracted the necessary
+As the supplementary material to the original publication by
+Yin, Y., et al. in Science (356(6337), 2017. https://doi.org/10.1126/science.aaj2239)
+was not presented in an analysis-friendly manner, we extracted the necessary
 information from the PDF document with figures and gathered it here.
-(See [README in teh SCRIPTS folder](../SCRIPTS/README.md) for details).
+(See [README in the SCRIPTS folder](../SCRIPTS/README.md) for details).
 
 - `extracted_lines_clean.txt` - raw extracted text
 - `extracted_lines_clean.txt` - cleaned raw data
@@ -157,7 +157,7 @@ of TFs made in Yin et al. study
 
 ## Replication results
 
-The files starting with `CHART_` contain XWAS results on replication cohort
+The files starting with `CHART_` contain XWAS results for the replication cohort
 (CHART cohort, Australia), using `limma` R package. Format:
 
 |  _variable name_       |   _format_     |    _description_       |
