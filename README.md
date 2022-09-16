@@ -1,7 +1,7 @@
 # X-factor-ART
 
 This repository contains all the scripts, data, figures, and visualizations
-that support the text published in...
+that support the text submitted to publication.
 
 > _Note that not all the output and data can be published here due to sensitive_
 > _nature of DNA methylation and other variables in our dataset._

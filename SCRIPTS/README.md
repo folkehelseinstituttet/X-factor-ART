@@ -2,6 +2,26 @@
 
 Lots of scripts that can be used to reproduce the analyses and figures.
 
+### XchromeAnalysis.R
+
+Script to run the main analyses in MoBa cohort.
+
+### Bootstrap_Consistency_findings.R
+
+Run bootstrapping to check consistency in the significance of the findings.
+
+### check_dmr.Rmd
+
+Checking the DMRff results, creating Figures 7 & 8 in the paper and Figures S4
+& S6 in the Supplementary, as well as
+[the table with all the significant DMRs](../flextable_signif_dmrs.html).
+
+### check_results.Rmd
+
+Checking results produced in `XchromeAnalysis.R`, creating Figures 2 & 3 as well
+as Supplementary Figure S3 and
+[the table with all the significant results](../nice_table_signif_results_all.html).
+
 ### create_coMET-like_figure.R
 
 Creating two figures:
@@ -13,10 +33,14 @@ genomic annotations of nearby regions (with the use of
 [`ggcorrplot` package](https://rpkgs.datanovia.com/ggcorrplot/) and 
 [`grid` package](https://www.stat.auckland.ac.nz/~paul/grid/grid.html))
 
+Such a pair of figures was constructed for each significant CpG (Figures 4--6).
+
 ### gg_qqplot.R
 
 Script for calculating data and plotting QQplots. Adapted from:
 https://slowkow.com/notes/ggplot2-qqplot/
+
+Creating Figure S2 (supplementary). 
 
 ### grabGenes.R
 

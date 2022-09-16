@@ -50,11 +50,11 @@ grabRegulRegions <- function(
     regulatory_regs <- regioneR::toGRanges(
       as.data.frame(
         regulatory_regs %>%
-          mutate(seqnames = "chrX") %>%
+          mutate(seqnames = paste0("chr", chromosome_name)) %>%
           dplyr::select(
             seqnames,
-            contains("start"),
-            contains("end"),
+            start = chromosome_start,
+            end = chromosome_end,
             everything()
           ) %>%
           distinct()

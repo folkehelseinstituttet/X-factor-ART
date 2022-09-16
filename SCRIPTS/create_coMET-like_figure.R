@@ -3,7 +3,7 @@
 #   that looks like from the coMET package
 # AUTHOR: Julia Romanowska
 # DATE CREATED: 2021.10.15
-# DATE UPDATED: 2021.12.27
+# DATE UPDATED: 2022.04.28
 # ----------------------
 
 # SETUP ----
@@ -16,9 +16,7 @@ library(grid)
 
 which_gender <- "boys"
 which_model <- 1
-which_signif <- 1
-# used internal naming of the models, but for publication, we need to
-#  translate it to model 1, 2, 3, 4
+which_signif <- 3
 all_model_names <- c("1c", "parents.1c", "1d.bw", "parents.1d.bw")
 which_model_name <- all_model_names[which_model]
 which_model_name
@@ -405,7 +403,7 @@ print(
   )
 )
 grid.text(
-  label = "x marks unsignificant correlation\n (adjustment method: BY)",
+  label = "x marks nonsignificant correlation\n (adjustment method: BY)",
   x = unit(0.8, "npc"),
   y = unit(0.1, "npc")
 )
