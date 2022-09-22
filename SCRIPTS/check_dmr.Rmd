@@ -582,9 +582,15 @@ signif_results_gen_location_flex <- flextable(
     p.adjust = function(x) sprintf("%.2e", x)
   ) %>%
   merge_v(
-    j = ~ Name + n + estimate + p.adjust + region_ID + gene_ID +
-      region_position + region_type + gene_descr + gene_name + gene_position +
-      group + model
+    j = ~ gene_ID + gene_descr + gene_name + gene_position + group + model
+  ) %>%
+  merge_v(
+    j = ~ Name + n + estimate + p.adjust,
+    combine = TRUE
+  ) %>%
+  merge_v(
+    j = ~ region_ID + region_type + region_position,
+    combine = TRUE
   ) %>%
   rotate(
     j = c("group", "model"),
