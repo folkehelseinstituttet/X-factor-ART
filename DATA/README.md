@@ -155,7 +155,7 @@ of TFs made in Yin et al. study
 
 - `TFs_methyl_sensitive_signif_CpGs.dat` - only methylation-sensitive TFs from the file above (the same format)
 
-## Replication results
+## Results from the external cohort
 
 The files starting with `CHART_` contain XWAS results for the replication cohort
 (CHART cohort, Australia), using `limma` R package. Format:
@@ -173,6 +173,9 @@ The files starting with `CHART_` contain XWAS results for the replication cohort
 | Male_nonART_mean       | numeric        | mean value of beta (DNAm) for males conceived naturally |
 | Female_nonART_mean     | numeric        | mean value of beta (DNAm) for females conceived naturally |
 | bacon_pvalue           | numeric        | p-value after adjustment with BACON algortithm |
+
+Moreover, there are also `.rds` files, where the genes and regulatory regions
+co-localized with the significant results were collected. _(currently, empty)_
 
 ## Bootstrapping results
 
