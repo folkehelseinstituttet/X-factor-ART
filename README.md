@@ -1,7 +1,9 @@
 # X-factor-ART
 
 This repository contains all the scripts, data, figures, and visualizations
-that support the text submitted to publication.
+that support the text in the publication:
+
+[Romanowska, J., Nustad, H.E., Page, C.M. et al. The X-factor in ART: does the use of assisted reproductive technologies influence DNA methylation on the X chromosome? _Hum Genomics_ 17, 35 **(2023)**. ](https://humgenomics.biomedcentral.com/articles/10.1186/s40246-023-00484-6)
 
 > _Note that not all the output and data can be published here due to sensitive_
 > _nature of DNA methylation and other variables in our dataset._
